@@ -375,7 +375,7 @@ fitBV.PLL <- function(
   #these are required packages
   #library checks
   #libList <- c("plotrix", "minpack.lm", "optimx","rgl")
-  libList <- c("plotrix","optimx","rgl")
+  libList <- c("plotrix","optimx")
   libChecks <- !sapply(libList,FUN=require,character.only=TRUE)
   if(!any(libChecks)&verbose)cat("\nLibrary load complete\n")
   if(any(libChecks))stop(paste("This program requires the following packages to be installed:  ",paste(libList[libChecks],collapse=" ")))
