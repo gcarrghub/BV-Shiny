@@ -5,12 +5,15 @@
 #### The latest version of this file can be found at the link above
 #### Just click on the same file named shinyFromGIT.R to see the code, then copy-paste
 #### into any R script window
-#### See the file directly by this link:  https://github.com/gcarrghub/BV-Shiny/blob/master/shinyFromGIT.R
+#### See the file directly by this link:  
+#### https://github.com/gcarrghub/BV-Shiny/blob/master/shinyFromGIT.R
 
-#### Example data are at https://github.com/gcarrghub/BV-Shiny/blob/master/BV%20paper%20data.xlsx
+#### Example data are at 
+#### https://github.com/gcarrghub/BV-Shiny/blob/master/BV%20paper%20data.xlsx
 #### Click the download button on the page that opens to use it locally
 
-#### For using git/github with Rstudio, see https://happygitwithr.com/, https://www.r-bloggers.com/rstudio-and-github/
+#### For using git/github with Rstudio, 
+#### see https://happygitwithr.com/, https://www.r-bloggers.com/rstudio-and-github/
 
 
 #### Run these lines first to check for required packages and install if necessary
