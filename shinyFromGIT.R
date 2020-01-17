@@ -57,7 +57,7 @@ if(FALSE){
   ### it seems that an artifact of messing with browser option is that help pages now open in the
   ### browser too, instead of internal to Rstudio.  To get back to default behavior reset with this
   ### command
-  options(browser = function(url){.Call("rs_browseURL", url) ;})
+  options(browser = function(url){.Call("rs_browseURL", url)})
   }
 
 
