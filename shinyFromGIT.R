@@ -11,7 +11,7 @@ runGitHub("BV-Shiny", "gcarrghub",launch.browser=TRUE)
 
 # If Firefox or Chrome are not default browser, open tool with
 # the line inside this if(FALSE){...}, then copy the http web address
-# into chrome or firefox
+# from the basic browser window into chrome or firefox address bar
 if(FALSE){
   runGitHub("BV-Shiny", "gcarrghub",launch.browser = .rs.invokeShinyWindowViewer)
 }
