@@ -6,10 +6,9 @@
 #### Just click on the same file named shinyFromGIT.R to see the code, then copy-paste
 #### into any R script window
 #### See the file directly by this link:  https://github.com/gcarrghub/BV-Shiny/blob/master/shinyFromGIT.R
-#### Just click the download button on the page that opens
 
 #### Example data are at https://github.com/gcarrghub/BV-Shiny/blob/master/BV%20paper%20data.xlsx
-#### Just click the download button on the page that opens
+#### Click the download button on the page that opens to use it locally
 
 #### For using git/github with Rstudio, see https://happygitwithr.com/, https://www.r-bloggers.com/rstudio-and-github/
 
