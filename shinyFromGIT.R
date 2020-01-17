@@ -1,6 +1,14 @@
 ####                                        #
 #### https://github.com/gcarrghub/BV-Shiny  # 
 ####                                        # 
+
+#### The latest version of this file can be found at the link above
+#### Just click on the same file named shinyFromGIT.R to see the code, then copy-paste
+#### into any R script window
+#### See the file directly by this link:  https://github.com/gcarrghub/BV-Shiny/blob/master/shinyFromGIT.R
+
+#### For using git/github with Rstudio, see https://happygitwithr.com/, https://www.r-bloggers.com/rstudio-and-github/
+
 #### Run these lines first to check for required packages and install if necessary
 #### Typically should only need to do this once
 packages = c("shiny", "dplyr", "gridExtra", "openxlsx", "optimx", "plotrix")
