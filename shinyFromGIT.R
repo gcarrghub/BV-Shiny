@@ -38,8 +38,12 @@ if(FALSE){
   ### The location in the following command may need to be modified to work on your system
   ### It is up to you to find where chrome.exe or firefox.exe is located if these don't work
   library(shiny)
-  ### only use one of the following two depending on your preference.
+  ### only use one of the following two depending on your preference on windows
   options(browser = "C:/Program Files/Google/Chrome/Application/chrome.exe")
   options(browser = "C:/Program Files/Mozilla Firefox/firefox.exe")
+  ### use one of the following two on mac
+  options(browser = "/usr/bin/open -a '/Applications/Google Chrome.app'")
+  options(browser = "/usr/bin/open -a '/Applications/Firefox.app'")
+  #now the app will open in your selected browser, independent of defaults
   runGitHub("BV-Shiny", "gcarrghub",launch.browser=TRUE)
 }
