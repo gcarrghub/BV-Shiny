@@ -1,5 +1,5 @@
 ####                                        #
-#### https://github.com/gcarrghub/BV-Shiny  #
+#### https://github.com/gcarrghub/BV-Shiny  # 
 ####                                        # 
 #### Run these lines first to check for required packages and install if necessary
 #### Typically should only need to do this once
