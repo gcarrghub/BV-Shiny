@@ -1,5 +1,5 @@
 # Check for required packages and install if necessary
-packages = c("shiny", "dplyr", "gridExtra", "openxlsx", "optimx", "rgl", "plotrix")
+packages = c("shiny", "dplyr", "gridExtra", "openxlsx", "optimx", "plotrix")
 packageTests <- sapply(packages,FUN = require,character.only=TRUE)
 install.packages(packages[!packageTests], repos = "https://cran.rstudio.com/")
 
