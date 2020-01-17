@@ -41,16 +41,23 @@ if(FALSE){
   runGitHub("BV-Shiny", "gcarrghub",launch.browser = .rs.invokeShinyWindowViewer)
   
   ### If something other than Chrome or Firefox is your default browser and you don't want to change it,
-  ### another option on windows, not mac, may be to set a browser option first as follows
-  ### The location in the following command may need to be modified to work on your system
-  ### It is up to you to find where chrome.exe or firefox.exe is located if these don't work
+  ### another option may be to set a browser option first as follows.
   library(shiny)
-  ### only use one of the following two depending on your preference on windows
+  ### The location in the following two commands may need to be modified to work on your MSwindows system
+  ### It is up to you to find where chrome.exe or firefox.exe is located if these don't work
+  ### Use only one of the following two depending on your preference on windows
   options(browser = "C:/Program Files/Google/Chrome/Application/chrome.exe")
   options(browser = "C:/Program Files/Mozilla Firefox/firefox.exe")
-  ### use one of the following two on mac
+  ### Use only one of the following two on mac
   options(browser = "/usr/bin/open -a '/Applications/Google Chrome.app'")
   options(browser = "/usr/bin/open -a '/Applications/Firefox.app'")
-  #now the app will open in your selected browser, independent of defaults
+  #now the app will open in your above selected browser, independent of defaults
   runGitHub("BV-Shiny", "gcarrghub",launch.browser=TRUE)
-}
+  
+  ### it seems that an artifact of messing with browser option is that help pages now open in the
+  ### browser too, instead of internal to Rstudio.  To get back to default behavior reset with this
+  ### command
+  options(browser = function(url){.Call("rs_browseURL", url) ;})
+  }
+
+
