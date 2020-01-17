@@ -7,7 +7,7 @@ install.packages(packages[!packageTests], repos = "https://cran.rstudio.com/")
 library(shiny)
 # If chrome or firefox are your default browsers, this should work fine, even in
 # a terminal or Rgui
-runGitHub("BV-Shiny", "gcarrghub")
+runGitHub("BV-Shiny", "gcarrghub",launch.browser=TRUE)
 
 # If Firefox or Chrome are not default browser, open tool with
 # the line inside this if(FALSE){...}, then copy the http web address
