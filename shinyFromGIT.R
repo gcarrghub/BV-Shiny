@@ -14,13 +14,13 @@ install.packages(packages[!packageTests], repos = "https://cran.rstudio.com/")
 library(shiny)
 runGitHub("BV-Shiny", "gcarrghub",launch.browser=TRUE)
 
-### If Firefox or Chrome are not default browser, open tool with
-### the two lines inside this if(FALSE){...}, then copy the http web address
-### from the basic browser window into chrome or firefox address bar
-###
-### At least on mac, instead of copy-paste you could alternatively highlight 
-### the whole address and drag it into an open browser window too
 if(FALSE){
+  ### If Firefox or Chrome are not default browser, open tool with
+  ### the two lines inside this if(FALSE){...}, then copy the http web address
+  ### from the basic browser window into chrome or firefox address bar
+  ###
+  ### At least on mac, instead of copy-paste you could alternatively highlight 
+  ### the whole address and drag it into an open browser window too
   library(shiny)
   runGitHub("BV-Shiny", "gcarrghub",launch.browser = .rs.invokeShinyWindowViewer)
 }
