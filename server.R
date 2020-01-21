@@ -259,23 +259,23 @@ shinyServer(function(input, output, session, clientData) {
                grid.newpage()
                grid.table(dataOrgZeroFixed(), rows = NULL)
                #addtable2plot(.5,1,dataOrgZeroFixed(),xjust=.5,yjust=0)	 
-               print("Check 1:  Sever finish fit")
-               print(results)
-               print(str(results))
+               #print("Check 1:  Sever finish fit")
+               #print(results)
+               #print(str(results))
                dev.off()
                setProgress(detail = "Creating table")
-               print("Check 2:  Sever create table")
+               #print("Check 2:  Sever create table")
                resultsTable <- data.frame(EC.level.PCT = 100*results$EC.level, 
                                           ECx = as.numeric(to3(results$ECx)), 
                                           LCL.95 = ifelse(goodFlag,yes = as.numeric(to3(results$LCL.95)),no = NA), 
                                           UCL.95 = ifelse(goodFlag,yes = as.numeric(to3(results$UCL.95)),no = NA))
-               print("Check 3:  Sever finished table")
+               #print("Check 3:  Sever finished table")
                output$resultsTable <- shiny::renderTable(expr = {resultsTable},bordered = TRUE,na = "N/A")
                
                setProgress(detail = "Creating plot")
                
-               print("Check 2:  Sever start plot")
-               print(c(goodFlag=goodFlag,ECXvalue=input$ECXvalue))
+               #print("Check 2:  Sever start plot")
+               #print(c(goodFlag=goodFlag,ECXvalue=input$ECXvalue))
                output$plot <- renderPlot({
                     isolate({
                          plotBV.LOG(dataOrgZeroFixed(),
