@@ -87,8 +87,8 @@ shinyUI(
                                               ),br(),
                                               strong("Contacts:"),
                                               tags$ul(
-                                                   tags$li("Primary: Gregory Carr (carr.gj)"),
-                                                   tags$li("Secondary: Jesse Krailler (krailler.j)")
+                                                   tags$li("Primary: Gregory Carr (carr.gj@pg.com)"),
+                                                   tags$li("Secondary: Joel Chaney (chaney.jg@pg.com)")
                                               ),
                                               img(src="../../../images/QSstacked.png", height=100)
                                          ),
