@@ -249,7 +249,7 @@ shinyServer(function(input, output, session, clientData) {
                     BVdata=dataOrgZeroFixed(),
                     ECXvalue=input$ECXvalue,
                     fileName=NULL,
-                    verbose=FALSE,
+                    verbose=input$debugPrint,
                     do3Dstart=FALSE,
                     FORCE=FALSE,
                     zeroSub=NULL,
