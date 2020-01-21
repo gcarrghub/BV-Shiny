@@ -91,7 +91,7 @@ shinyUI(
                                                    tags$li("Secondary: Joel Chaney (chaney.jg@pg.com)")
                                               ),
                                               img(src="D&MS_Logo_RGB-Color.png", 
-                                                  #type="image/png",
+                                                  #this file should be in the www folder, not top level
                                                   height=200)
                                          ),
                                          column(
