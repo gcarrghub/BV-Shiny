@@ -219,6 +219,7 @@ to3 <- function(x,nDigits=3){
 plotBV.LOG <- function(
   inputData,
   bestPars,
+  debugTF = FALSE,
   goodFit = TRUE,
   ylimInput = NULL,
   xlimInput = NULL,
@@ -239,17 +240,17 @@ plotBV.LOG <- function(
       (max(unique(inputData$dose)))+doseDelta
     )
   }
-  print(c(doseDelta=doseDelta,xlimInput=xlimInput))
+  if(debugTF)print(c(doseDelta=doseDelta,xlimInput=xlimInput))
   inputData <- inputData[with(inputData,order(dose,y)),]
   jitterFactor <- min(diff(log10(na.omit(unique(inputData[inputData$dose>0,]$dose)))))/10
-  print(c(JFratio = signif(jitterFactor/diff(par("usr")[1:2]),3)))
+  if(debugTF)print(c(JFratio = signif(jitterFactor/diff(par("usr")[1:2]),3)))
   if(jitterFactor>0.002*diff(par("usr")[1:2]))jitterFactor <- 0.002*diff(par("usr")[1:2])
-  print("check0 plotBV.LOG")
+  if(debugTF)print("check0 plotBV.LOG")
   with(inputData[inputData$dose>0,],
        {
          plot(y=y,x=dose,log='x',xlim=xlimInput,xlab=xlabel,ylab=ylabel,ylim=ylimInput,axes=FALSE,
               cex=1.3,cex.lab=1.3,type="n")
-         print(c(jitterFactor=jitterFactor,parDiff=diff(par("usr")[1:2])))
+         if(debugTF)print(c(jitterFactor=jitterFactor,parDiff=diff(par("usr")[1:2])))
          #for each unique dose, randomly jitter
          sapply(unique(dose),FUN = function(xdose){
            yPts <- y[dose==xdose]
@@ -262,7 +263,7 @@ plotBV.LOG <- function(
   #orders<-seq(floor(par("usr")[1]),ceiling(par("usr")[2]))
   #axes etc
   axis(side=2,lwd=2)
-  print("check0B plotBV.LOG")
+  if(debugTF)print("check0B plotBV.LOG")
   if(goodFit)rug(side=1,lwd=1,
       x=10^(rep(orders[-1],each=8)+rep(log10(2:9),diff(range(orders[-1]))+1)),
       tck=-.01)
@@ -286,11 +287,11 @@ plotBV.LOG <- function(
   #print(log.xVals)
   #print(ECxTarget)
   #print(optFUN.BV.LOG(bestPars,y=inputData$y,logdoses=log.xVals,ECx.target=ECxTarget,predictionsOnly=TRUE))
-  print(c(ECxTarget=ECxTarget))
+  if(debugTF)print(c(ECxTarget=ECxTarget))
   lines(x=10^log.xVals,y=optFUN.BV.LOG(bestPars,y=inputData$y,logdoses=log.xVals,ECx.target=ECxTarget,predictionsOnly=TRUE),col="blue",lwd=2)
   lines(x=10^log.xValsC,y=optFUN.BV.LOG(bestPars,y=inputData$y,logdoses=rep(log(0),2),ECx.target=ECxTarget,predictionsOnly=TRUE),col="blue",lwd=2)
   axis.break(axis=1,breakpos=10^(ceiling(par("usr")[1])+.8),bgcol="white",breakcol="black",style="zigzag",brw=0.02)
-  print("check0C plotBV.LOG")
+  if(debugTF)print("check0C plotBV.LOG")
   if(goodFit){
     #confidence limits
     lines(x=10^c(lowerCI["xmid"],upperCI["xmid"]),y=rep((1-ECxTarget)*exp(bestPars["Asym"]),2),lwd=2)
@@ -298,26 +299,26 @@ plotBV.LOG <- function(
     rug(side=1,x=10^bestPars["xmid"])
   }
   #print(c(lowerCI.xmid,upperCI.xmid))
-  print("check0D plotBV.LOG")
-  print(c(goodFit=goodFit))
+  if(debugTF)print("check0D plotBV.LOG")
+  if(debugTF)print(c(goodFit=goodFit))
   if (!cleanTF & goodFit){
     newY <- optFUN.BV.LOG(lowerCI,y=inputData$y,logdoses=log.xVals,ECx.target=ECxTarget,predictionsOnly=TRUE)
     lines(x=10^log.xVals,y=newY,col="blue",lty=2)
     newY <- optFUN.BV.LOG(lowerCI,y=inputData$y,logdoses=rep(log(0),2),ECx.target=ECxTarget,predictionsOnly=TRUE)
     lines(x=10^log.xValsC,y=newY,col="blue",lty=2)
     points(x=10^lowerCI["xmid"],y=optFUN.BV.LOG(lowerCI,y=inputData$y,logdoses=lowerCI["xmid"],ECx.target=ECxTarget,predictionsOnly=TRUE),col="blue",pch=16)
-    print("check1 plotBV.LOG")
+    if(debugTF)print("check1 plotBV.LOG")
     
     newY <- optFUN.BV.LOG(upperCI,y=inputData$y,logdoses=log.xVals,ECx.target=ECxTarget,predictionsOnly=TRUE)
     lines(x=10^log.xVals,y=newY,col="cyan3",lty=2)
     newY <- optFUN.BV.LOG(upperCI,y=inputData$y,logdoses=rep(log(0),2),ECx.target=ECxTarget,predictionsOnly=TRUE)
     lines(x=10^log.xValsC,y=newY,col="cyan3",lty=2)
     points(x=10^upperCI["xmid"],y=optFUN.BV.LOG(upperCI,y=inputData$y,logdoses=upperCI["xmid"],ECx.target=ECxTarget,predictionsOnly=TRUE),col="cyan3",pch=16)
-    print("check2 plotBV.LOG")
+    if(debugTF)print("check2 plotBV.LOG")
     
     #format values for display in figures
     formattedECvals <- structure(c(format(to3(10^c(lowerCI["xmid"],upperCI["xmid"],bestPars["xmid"])),scientific=FALSE),format(ECxTarget)),names=c("LCL.95","UCL.95","ECx","EC.Level"))
-    if(verbose){
+    if(debugTF){
       cat("\n")
       print(formattedECvals,quote=FALSE)
     }
@@ -336,25 +337,25 @@ plotBV.LOG <- function(
     if(!varFixed)mtext(side=1,line=-3.0,outer=TRUE,text="Variance is proportional to mean",cex=.5,adj=0.02)
     #mtext(side=1,line=-2,outer=TRUE,text=inputFile,cex=.5,adj=0.02)
     mtext(side=1,line=-2,outer=TRUE,text=date(),cex=.5,adj=0.98)
-    print("check3 plotBV.LOG")
+    if(debugTF)print("check3 plotBV.LOG")
     mtext(side=3,adj=0.0,line=0,
           text=bquote(mu[y]==bgroup("(",
                                     atop(
                                       paste(A,phantom(Phi*group("[",z[1-.(ECxTarget)] + group("(",log[10](EC[.(100*ECxTarget)]) - log[10](Conc),")")/sigma,"]")),phantom(XX),Conc==0),
                                       paste(A*Phi*group("[",z[1-.(ECxTarget)] + group("(",log[10](EC[.(100*ECxTarget)]) - log[10](Conc),")")/sigma,"]"),phantom(XX),Conc>0)),
                                     "")))
-    print("check4 plotBV.LOG")
+    if(debugTF)print("check4 plotBV.LOG")
     mtext(side=3,line=0.3,adj=0.98,text=bquote(hat(sigma)==.(to3(exp(bestPars["scal"])))))
     mtext(side=3,line=1.4,adj=0.98,text=bquote(hat(EC[.(100*ECxTarget)])==.(to3(10^bestPars["xmid"]))))
     mtext(side=3,line=2.8,adj=0.98,text=bquote(hat(A)==.(to3(exp(bestPars["Asym"])))))
     plotData <- as.matrix(as.data.frame(lapply(inputData[,c("dose","y")],format)))
-    print("check5 plotBV.LOG")
+    if(debugTF)print("check5 plotBV.LOG")
     #plotData <- as.matrix(lapply(plotData,as.character))
     #par(new=TRUE)
     #plot(1,1,type='n',axes=FALSE,xlab='',ylab='')
     #addtable2plot(x=2*(10^ceiling(par("usr")[1])),y=par("usr")[3],table=plotData,cex=.5)
   }
-  print("Finish plotBV.LOG")
+  if(debugTF)print("Finish plotBV.LOG")
   invisible()
 }
 
@@ -397,7 +398,7 @@ fitBV.PLL <- function(
   
   msgText <- ""
   groupVars <- with(BVdata,tapply(X=y,INDEX=dose,FUN=var))
-  print(c(groupVars==groupVars))
+  if(verbose)print(c(groupVars==groupVars))
   groupSizes <- with(BVdata,table(dose))
   if(verbose)print(data.frame(N=groupSizes,variance=groupVars))
   stopError<-FALSE
@@ -425,7 +426,7 @@ fitBV.PLL <- function(
   if(stopError){
     print("In stop error wrap up")
     upperCI <- lowerCI <- plotLine <- c(Asym=log(mean(BVdata$y)),xmid=log10(max(BVdata$dose))+100,scal=.00001)
-    try(plotBV.LOG(BVdata,plotLine,ECxTarget=.01,cleanTF=TRUE,
+    try(plotBV.LOG(BVdata,plotLine,ECxTarget=.01,cleanTF=TRUE,debugTF=verbose,
                    ylimInput=c(0,max(BVdata$y)),
                    xlimInput=10^range(c(floor(c(log10(min(BVdata$dose[BVdata$dose>0]))))-1,ceiling(c(log10(max(BVdata$dose))))))
     ))
@@ -461,7 +462,7 @@ fitBV.PLL <- function(
         #do the plot only if we have not already done it
         if(nchar(msgText)>0)mtext(side=1,line=-2.5,outer=TRUE,text="No evidence of trend in data",cex=.5,adj=0.98)
         if(nchar(msgText)==0){
-          try(plotBV.LOG(BVdata,plotLine,ECxTarget=ECXvalue,
+          try(plotBV.LOG(BVdata,plotLine,ECxTarget=ECXvalue,debugTF=verbose,
                          ylimInput=c(0,max(BVdata$y)),
                          xlimInput=10^range(c(floor(c(log10(min(BVdata$dose[BVdata$dose>0]))))-1,ceiling(c(log10(max(BVdata$dose))))))
           ))
@@ -702,7 +703,7 @@ fitBV.PLL <- function(
     print(c(nullLL=nullLL,fullLL=bestParsLL,critVal=fBasedCritVal))
     lowerCI <<- bestParsEC50
     upperCI <<- bestParsEC50
-    try(plotBV.LOG(inputData = BVdata,bestPars = bestParsECx,ECxTarget=ECXvalue,
+    try(plotBV.LOG(inputData = BVdata,bestPars = bestParsECx,ECxTarget=ECXvalue,debugTF=verbose,
                    goodFit = FALSE,
                    ylimInput=c(0,max(BVdata$y)),
                    xlimInput=10^range(c(floor(c(log10(min(BVdata$dose[BVdata$dose>0]))))-1,ceiling(c(log10(max(BVdata$dose))))))
@@ -913,7 +914,7 @@ fitBV.PLL <- function(
   #print("start clean plot")
   #if(FALSE){
   
-  plotBV.LOG(BVdata,bestPars = bestParsECx,ECxTarget=ECXvalue,
+  plotBV.LOG(BVdata,bestPars = bestParsECx,ECxTarget=ECXvalue,debugTF=verbose,
              ylimInput=c(0,max(BVdata$y,exp(lowerCI["Asym"]),exp(upperCI["Asym"]))),
              xlim=10^range(c(floor(c(lowerCI["xmid"],log10(min(BVdata$dose[BVdata$dose>0]))))-1,ceiling(c(upperCI["xmid"],log10(max(BVdata$dose)))))),
              clean=TRUE,littleLogs=FALSE,ylabel=ylabel,xlabel=xlabel)
@@ -925,7 +926,7 @@ fitBV.PLL <- function(
           trustLower=unname(lowerCIbounds[3]),trustUpper=unname(upperCIbounds[3]),ECx.outside=as.numeric((10^bestParsECx["xmid"])>max(nzDoses))))
   
   
-  plotBV.LOG(BVdata,bestPars = bestParsECx,ECxTarget=ECXvalue,
+  plotBV.LOG(BVdata,bestPars = bestParsECx,ECxTarget=ECXvalue,debugTF=verbose,
              ylimInput=c(0,max(BVdata$y,exp(lowerCI["Asym"]),exp(upperCI["Asym"]))),
              xlim=10^range(c(floor(c(lowerCI["xmid"],log10(min(BVdata$dose[BVdata$dose>0]))))-1,ceiling(c(upperCI["xmid"],log10(max(BVdata$dose)))))
              ),ylabel=ylabel,xlabel=xlabel
