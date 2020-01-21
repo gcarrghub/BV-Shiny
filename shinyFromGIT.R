@@ -20,7 +20,9 @@
 #### Typically should only need to do this once
 packages = c("shiny", "dplyr", "gridExtra", "openxlsx", "optimx", "plotrix")
 packageTests <- sapply(packages,FUN = require,character.only=TRUE)
-install.packages(packages[!packageTests], repos = "https://cran.rstudio.com/")
+install.packages(packages[!packageTests], repos = "https://cran.rstudio.com/", dependencies=TRUE)
+### In rare cases, if package installation returns errors related to 00LOCK... folder/file, this may work (no promises)
+install.packages(packages[!packageTests], repos = "https://cran.rstudio.com/", dependencies=TRUE, INSTALL_opts = c('--no-lock'))
 
 ### once the packages above are installed
 ### the tool will run with only these two lines
@@ -49,6 +51,7 @@ if(FALSE){
   ### is located if these don't work.  Use only one of the following two depending on 
   ### your preference on windows
   options(browser = "C:/Program Files/Google/Chrome/Application/chrome.exe")
+  options(browser = "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe")
   options(browser = "C:/Program Files/Mozilla Firefox/firefox.exe")
   ### Use only one of the following two on mac
   options(browser = "/usr/bin/open -a '/Applications/Google Chrome.app'")
