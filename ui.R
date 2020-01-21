@@ -43,11 +43,9 @@ shinyUI(
                                               Bruce and Versteeg, ETC 1992.  This analysis is appropriate for experiments in which a continuous response is measured on each individual or 
                                               experimental unit, such as a body weight, or possibly for groups of individuals, such as counts of algae in a vessel.  The response level must decline as 
                                               toxicity (the exposure level) increases."),
-                                         p(strong("This tool is not meant to be used for count data."), " For this type of data, please visit the",
-                                           a(href='http://mb-qs-pp-cuda03.rd-hcanalyt001.na.pg.com:3838/ESO.Tools/logisAb/', "Logistic Abbott Tool"), 
-                                         " or return to the ", a(href='http://qsportal.pg.com/ESOTools/', "full list of ESO tools.")),
+                                         p(strong("This tool is developed for continuous positive value responses such as body weights (NOT counts such as mortality)."),
+                                           "  Proper usage is the sole responsibility of the user.  No warranty is made or implied.  Constructive feedback is appreciated."),
                                          br(),
-                                         
                                          column(
                                               width=8,
                                               strong("Directions:"),
