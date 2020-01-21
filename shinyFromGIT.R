@@ -2,6 +2,12 @@
 #### https://github.com/gcarrghub/BV-Shiny  # 
 ####                                        # 
 
+####
+#### If defaults are satisfied (chrome or firefox are your default browser) devtools installed), should be able to just do the following:
+dtCheck <- require(devtools)
+if(!dtCheck)install.packages("devtools", repos = "https://cran.rstudio.com/", dependencies=TRUE)
+if(FALSE) devtools::source_url("https://github.com/gcarrghub/BV-Shiny/blob/master/shinyFromGIT.R?raw=TRUE")
+
 #### The latest version of this file can be found at the link above
 #### Just click on the same file named shinyFromGIT.R to see the code, then copy-paste
 #### into any R script window
