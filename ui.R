@@ -27,6 +27,7 @@ shinyUI(
                          textInput("xlab","x-label for plot",value="Concentration"),
                          textInput("ylab","y-label for plot",value="Response Level"),
                          checkboxInput("annot8Plot","Annotate Plot",value=FALSE),	
+                         br(),
                          checkboxInput("debugPrint","Print Debug Info (local only)",value=FALSE),	
                          br(),
                          uiOutput("button")
