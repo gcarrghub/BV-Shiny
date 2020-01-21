@@ -90,7 +90,7 @@ shinyUI(
                                                    tags$li("Primary: Gregory Carr (carr.gj@pg.com)"),
                                                    tags$li("Secondary: Joel Chaney (chaney.jg@pg.com)")
                                               ),
-                                              img(src="../../../images/QSstacked.png", height=100)
+                                              img(src="D&MS_Logo_RGB-Color.jpg", height=100)
                                          ),
                                          column(
                                               width=4,
