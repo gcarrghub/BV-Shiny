@@ -20,9 +20,9 @@
 #### Typically should only need to do this once
 packages = c("shiny", "dplyr", "gridExtra", "openxlsx", "optimx", "plotrix")
 packageTests <- sapply(packages,FUN = require,character.only=TRUE)
-install.packages(packages[!packageTests], repos = "https://cran.rstudio.com/", dependencies=TRUE)
+if(sum(!packageTests)>0)install.packages(packages[!packageTests], repos = "https://cran.rstudio.com/", dependencies=TRUE)
 ### In rare cases, if package installation returns errors related to 00LOCK... folder/file, this may work (no promises)
-install.packages(packages[!packageTests], repos = "https://cran.rstudio.com/", dependencies=TRUE, INSTALL_opts = c('--no-lock'))
+if(FALSE)install.packages(packages[!packageTests], repos = "https://cran.rstudio.com/", dependencies=TRUE, INSTALL_opts = c('--no-lock'))
 
 ### once the packages above are installed
 ### the tool will run with only these two lines
@@ -30,6 +30,7 @@ install.packages(packages[!packageTests], repos = "https://cran.rstudio.com/", d
 ### this should work in Rstudio, the Rgui, or even a terminal window on mac
 library(shiny)
 runGitHub("BV-Shiny", "gcarrghub",launch.browser=TRUE)
+
 
 if(FALSE){
   ### If Firefox or Chrome are not default browser, open tool with
