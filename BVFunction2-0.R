@@ -857,7 +857,7 @@ fitBV.PLL <- function(
   if(regexpr("error",class(upperCIbounds))<0 & upperCIbounds[3]==0){
     if(verbose){
       print("trying to extend upper bound")
-      print(upperCIbounds)
+      print(upperCIbounds) 
     }
     #upperCIbounds[1:2]+c(0,1) extends the interval upwards, and, using extendInt = "upX" tells uniroot to keep looking even beyond
     #until it gives up (usually that will mean an error that the LL cant be calculated)
