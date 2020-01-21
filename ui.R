@@ -51,8 +51,8 @@ shinyUI(
                                               strong("Directions:"),
                                               tags$ul(
                                                    tags$li("Choose the file containing data for analysis, from a single experiment, (see Data Format and Acceptable File Formats below) using the 
-                                                 'Choose File' button in the grey panel. Verify data is correct on Data For Analysis tab."),
-                                                   tags$li("Select the desired Effect Level using the slider (effect is DECREASE from control level) eg, 0.20 is for the concentration resulting in at 20% decrease in the response level.  
+                                                 'Choose File' button in the grey panel at left. Verify data in the 'Data For Analysis' tab."),
+                                                   tags$li("Select the desired Effect Level using the slider (effect is %DECREASE from control level) eg, 0.20 is for the concentration resulting in at 20% decrease in the response level.  
                                                       This program attempts to limit this selection to levels plausible for the range of responses observed."),
                                                    tags$li("If it is reasonable to assume the variance of the response is fixed across doses, check the box in the panel."),
                                                    tags$li("Click the Results tab to go to the results page, then click Calculate the Results button in the grey panel.  Both PDF and Excel versions of output can be downloaded at the bottom of results.  If data were provided in Excel, the entire
@@ -78,7 +78,8 @@ shinyUI(
                                               tags$ul(
                                                    tags$li("MSExcel Files (both .xls & .xlsx extensions) : If using an Excel file, a single worksheet in that file must be dedicated to the one experiment to analyze 
                                               (no other cells should be filled).  Start the data in row 1 column A.  When an Excel file is used as input, the sheet names within the Excel workbook
-                                                      will appear in the grey panel.  If there is more than one sheet in the file, you will be prompted to choose the sheet containing the data."),
+                                                      will appear in the grey panel.  If there is more than one sheet in the file, you will be prompted to choose the sheet containing the data.  The github repository
+                                                      contains an XLSX workbook within which several valid example datasets are provided, one in each worksheet."),
                                                    tags$li("CSV file: Follow same principles.  In this file format, values in a row are separated by commas."),
                                                    tags$li("Text File: Follow same principles.  In this file format, values in a row are separated by tabs.")
                                                    
