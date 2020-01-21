@@ -552,9 +552,9 @@ fitBV.PLL <- function(
   if(!varFixed)startVals <- unlist(SSvals[which.min(SSvals[,"wRSS"]),c("Asym","xmid","scal")])
   if( varFixed)startVals <- unlist(SSvals[which.min(SSvals[,"RSS"]), c("Asym","xmid","scal")])
   
-  print(paste(rep("#",80),collapse=""),quote=FALSE)
-  print("check1 fitBV.PLL")
   if(verbose){
+    print(paste(rep("#",80),collapse=""),quote=FALSE)
+    print("check1 fitBV.PLL")
     cat("\nStarting parameter values (EC50)\n")
     #  print(sapply(c(exp(startVals["Asym"]),10^(startVals["xmid"]-qnorm(1-ECXvalue)*exp(startVals["scal"])),exp(startVals["scal"])),to3,nDigits=4),quote=FALSE)
     print(sapply(c(exp(startVals["Asym"]),10^(startVals["xmid"]),exp(startVals["scal"])),to3,nDigits=4),quote=FALSE)
@@ -612,10 +612,11 @@ fitBV.PLL <- function(
   fullFit <- optimx(par=startVals,optFUN.BV.LOG,y=BVdata$y,logdoses=log10(BVdata$dose),ECx.target=0.5,
                     control=list(dowarn=FALSE,follow.on=TRUE,save.failures=FALSE),method=optimxMethods)
   fullFit <- fullFit[order(fullFit$value),]
-  print(fullFit)
-  
-  print(paste(rep("#",80),collapse=""),quote=FALSE)
-  print("check2 fitBV.PLL")
+  if(verbose){
+    print(fullFit)
+    print(paste(rep("#",80),collapse=""),quote=FALSE)
+    print("check2 fitBV.PLL")
+  }
   
   if(FALSE){
     startValsAB <- unlist(fullFit[1,1:3])
@@ -836,13 +837,17 @@ fitBV.PLL <- function(
       print("end trying to lower extend")
     }
   }
-  print(paste(rep("#",80),collapse=""),quote=FALSE)
-  print("check10 fitBV.PLL")
+  if(verbose){
+    print(paste(rep("#",80),collapse=""),quote=FALSE)
+    print("check10 fitBV.PLL")
+  }
   
   
   if(regexpr("error",class(upperCIbounds))<0 & upperCIbounds[3]==0){
-    print("trying to extend upper bound")
-    print(upperCIbounds)
+    if(verbose){
+      print("trying to extend upper bound")
+      print(upperCIbounds)
+    }
     #upperCIbounds[1:2]+c(0,1) extends the interval upwards, and, using extendInt = "upX" tells uniroot to keep looking even beyond
     #until it gives up (usually that will mean an error that the LL cant be calculated)
     upperCI.xmid <- try(uniroot(f=unirootFUN.LOG,interval=upperCIbounds[1:2]+c(0,1),indata=BVdata,ECX=ECXvalue,parsGuess=upperCIbounds[c("Asym","scal")],extendInt = "upX"))
@@ -852,14 +857,18 @@ fitBV.PLL <- function(
     }
     if(!is(lowerCI.xmid,"error")){
       upperCI <- .lastBest
-      print(upperCI.xmid)
+      if(verbose)print(upperCI.xmid)
       upperCI.xmid <- upperCI.xmid$root
-      print(upperCI.xmid)
-      print("end trying to extend upper")
+      if(verbose){
+        print(upperCI.xmid)
+        print("end trying to extend upper")
+      }
     }
   }
-  print(paste(rep("#",80),collapse=""),quote=FALSE)
-  print("check11 fitBV.PLL")
+  if(verbose){
+    print(paste(rep("#",80),collapse=""),quote=FALSE)
+    print("check11 fitBV.PLL")
+  }
   
   if(FALSE){
     #  if(!(is(lowerCIbounds,"error") & lowerCIbounds[3]==1)){
@@ -883,15 +892,19 @@ fitBV.PLL <- function(
   }
   
   if(regexpr("error",class(upperCIbounds))<0 & upperCIbounds[3]==1){
-    print("check of upperCIbounds")
-    print(upperCIbounds)
-    print(unirootFUN.LOG(xmidVal = upperCIbounds[1],indata=BVdata,ECX=ECXvalue,parsGuess=upperCIbounds[c("Asym","scal")],debugTF = TRUE))
-    print(unirootFUN.LOG(xmidVal = upperCIbounds[2],indata=BVdata,ECX=ECXvalue,parsGuess=upperCIbounds[c("Asym","scal")],debugTF = TRUE))
+    if(verbose){
+      print("check of upperCIbounds")
+      print(upperCIbounds)
+      print(unirootFUN.LOG(xmidVal = upperCIbounds[1],indata=BVdata,ECX=ECXvalue,parsGuess=upperCIbounds[c("Asym","scal")],debugTF = TRUE))
+      print(unirootFUN.LOG(xmidVal = upperCIbounds[2],indata=BVdata,ECX=ECXvalue,parsGuess=upperCIbounds[c("Asym","scal")],debugTF = TRUE))
+    }
     upperCI.xmid <- try(uniroot(f=unirootFUN.LOG,interval=upperCIbounds[1:2],indata=BVdata,ECX=ECXvalue,parsGuess=upperCIbounds[c("Asym","scal")])$root)
     upperCI <- .lastBest
   }
-  print(paste(rep("#",80),collapse=""),quote=FALSE)
-  print("check12 fitBV.PLL")
+  if(verbose){
+    print(paste(rep("#",80),collapse=""),quote=FALSE)
+    print("check12 fitBV.PLL")
+  }
   
   if(FALSE){
     #if(!(regexpr("error",class(upperCIbounds))<0 & upperCIbounds[3]==1)){
@@ -922,7 +935,7 @@ fitBV.PLL <- function(
   #}
   
   #print("start annotated plot")
-  print(c(EC.level=ECXvalue,ECx=10^unname(bestParsECx["xmid"]),LCL.95=10^unname(lowerCI["xmid"]),UCL.95=10^unname(upperCI["xmid"]),C.level=exp(unname(bestParsECx["Asym"])),Scale=exp(unname(bestParsECx["scal"])),
+  if(verbose)print(c(EC.level=ECXvalue,ECx=10^unname(bestParsECx["xmid"]),LCL.95=10^unname(lowerCI["xmid"]),UCL.95=10^unname(upperCI["xmid"]),C.level=exp(unname(bestParsECx["Asym"])),Scale=exp(unname(bestParsECx["scal"])),
           trustLower=unname(lowerCIbounds[3]),trustUpper=unname(upperCIbounds[3]),ECx.outside=as.numeric((10^bestParsECx["xmid"])>max(nzDoses))))
   
   
