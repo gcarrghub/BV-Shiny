@@ -14,7 +14,7 @@ if(FALSE){
 }
 #### The latest version of this file can be found at the link below
 #### Just click on the same file named shinyFromGIT.R to see the code, then copy-paste
-#### into any R script window
+#### into any R script window.
 #### See the file directly by this link in plain text:
 #### https://raw.github.com/gcarrghub/BV-Shiny/master/shinyFromGIT.R
 #### or in a code-formatted window:
