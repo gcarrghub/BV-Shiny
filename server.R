@@ -5,7 +5,6 @@ library(gridExtra)
 #library(XLConnect)
 library(openxlsx)
 
-print(getwd())
 if(!dir.exists("www"))dir.create("www")
 if(dir.exists("www")){
         pdfFiles <- list.files(path="www",pattern = "pdf$",full.names = TRUE)
