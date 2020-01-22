@@ -5,14 +5,16 @@ library(gridExtra)
 #library(XLConnect)
 library(openxlsx)
 
-if(!dir.exists("www"))dir.create("www")
 if(dir.exists("www")){
+        #delete leftover files if they are present from previous runs
+        #this only really matter when the repository is set up in rstudio and run inside of rstudio in usual way
         pdfFiles <- list.files(path="www",pattern = "pdf$",full.names = TRUE)
         pngFiles <- list.files(path="www",pattern = "png$",full.names = TRUE)
         xlsxFiles <- list.files(path="www",pattern = "xlsx$",full.names = TRUE)
         files2remove <- c(pdfFiles,pngFiles,xlsxFiles)
         unlink(files2remove)
 }
+if(!dir.exists("www"))dir.create("www")
 shinyServer(function(input, output, session, clientData) {
      values <- reactiveValues()
      values$zeros <- FALSE
