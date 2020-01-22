@@ -94,8 +94,8 @@ shinyUI(
                                                    tags$li("Secondary: Joel Chaney (chaney.jg@pg.com)")
                                               ),
                                               img(src="../PG-DMS.png", 
-                                                  #this file should be in the www folder, not top level
-                                                  #or maybe ../D&MS_Logo_RGB-Color.png would work?
+                                                  #as a part of the webpage display, by default this file is looked for in www, but
+                                                  #we want to reserve that folder for only temporary files
                                                   height=100)
                                          ),
                                          column(
