@@ -93,7 +93,7 @@ shinyUI(
                                                    tags$li("Primary: Gregory Carr (carr.gj@pg.com)"),
                                                    tags$li("Secondary: Joel Chaney (chaney.jg@pg.com)")
                                               ),
-                                              img(src="PG-DMS.png", 
+                                              img(src="../PG-DMS.png", 
                                                   #this file should be in the www folder, not top level
                                                   #or maybe ../D&MS_Logo_RGB-Color.png would work?
                                                   height=100)
