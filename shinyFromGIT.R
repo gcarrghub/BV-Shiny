@@ -8,6 +8,7 @@ dtCheck <- require(devtools)
 if(!dtCheck)install.packages("devtools", repos = "https://cran.rstudio.com/", dependencies=TRUE)
 #### Following are two equivalent one-liners that will launch the tool by the defaults of this script
 if(FALSE){
+  devtools::source_url("https://raw.github.com/gcarrghub/BV-Shiny/master/shinyFromGIT.R")
   devtools::source_url("https://github.com/gcarrghub/BV-Shiny/blob/master/shinyFromGIT.R?raw=TRUE")
   devtools::source_url("https://raw.githubusercontent.com/gcarrghub/BV-Shiny/master/shinyFromGIT.R?raw=TRUE")
 }
@@ -16,6 +17,7 @@ if(FALSE){
 #### into any R script window
 #### See the file directly by this link in plain text:
 #### https://raw.githubusercontent.com/gcarrghub/BV-Shiny/master/shinyFromGIT.R
+#### https://raw.github.com/gcarrghub/BV-Shiny/master/shinyFromGIT.R
 #### or in a code-formatted window:
 #### https://github.com/gcarrghub/BV-Shiny/blob/master/shinyFromGIT.R
 #### From this view, right click on the "Raw" button to save to a local file
