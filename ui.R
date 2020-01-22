@@ -93,7 +93,7 @@ shinyUI(
                                                    tags$li("Primary: Gregory Carr (carr.gj@pg.com)"),
                                                    tags$li("Secondary: Joel Chaney (chaney.jg@pg.com)")
                                               ),
-                                              img(src="../PG-DMS.png", 
+                                              img(src="PG-DMS.jpg", 
                                                   #as a part of the webpage display, by default this file is looked for in www, but
                                                   #we want to reserve that folder for only temporary files
                                                   height=100)

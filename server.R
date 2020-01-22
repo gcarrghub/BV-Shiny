@@ -5,8 +5,15 @@ library(gridExtra)
 #library(XLConnect)
 library(openxlsx)
 
+print(getwd())
 if(!dir.exists("www"))dir.create("www")
-
+if(dir.exists("www")){
+        pdfFiles <- list.files(path="www",pattern = "pdf$",full.names = TRUE)
+        pngFiles <- list.files(path="www",pattern = "png$",full.names = TRUE)
+        xlsxFiles <- list.files(path="www",pattern = "xlsx$",full.names = TRUE)
+        files2remove <- c(pdfFiles,pngFiles,xlsxFiles)
+        unlink(files2remove)
+}
 shinyServer(function(input, output, session, clientData) {
      values <- reactiveValues()
      values$zeros <- FALSE
