@@ -16,7 +16,6 @@ if(FALSE){
 #### Just click on the same file named shinyFromGIT.R to see the code, then copy-paste
 #### into any R script window
 #### See the file directly by this link in plain text:
-#### https://raw.githubusercontent.com/gcarrghub/BV-Shiny/master/shinyFromGIT.R
 #### https://raw.github.com/gcarrghub/BV-Shiny/master/shinyFromGIT.R
 #### or in a code-formatted window:
 #### https://github.com/gcarrghub/BV-Shiny/blob/master/shinyFromGIT.R
