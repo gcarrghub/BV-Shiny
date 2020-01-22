@@ -36,7 +36,7 @@ shinyUI(
                     width=9,
                     tabsetPanel(id="tabs",
                                 tabPanel("Help/Documentation",
-                                         h4("Requires use of Firefox or Chrome browsers"),
+                                         h4("Requires Firefox or Chrome browsers.  If this page opens in anything else, copy-paste the full link/address into Chrome or Firefox."),
                                          br(),
                                          strong("Purpose of the Tool"),
                                          p("Estimate the concentration that results in a given effect level, as a percentage of the average response of untreated controls, by methods described in 

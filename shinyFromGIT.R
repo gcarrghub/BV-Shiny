@@ -6,13 +6,19 @@
 #### If defaults are satisfied (chrome or firefox are your default browser) devtools installed), should be able to just do the following:
 dtCheck <- require(devtools)
 if(!dtCheck)install.packages("devtools", repos = "https://cran.rstudio.com/", dependencies=TRUE)
-if(FALSE) devtools::source_url("https://github.com/gcarrghub/BV-Shiny/blob/master/shinyFromGIT.R?raw=TRUE")
-
-#### The latest version of this file can be found at the link above
+#### Following is a one-liner that will launch the tool by the defaults of this script
+if(FALSE){
+  devtools::source_url("https://github.com/gcarrghub/BV-Shiny/blob/master/shinyFromGIT.R?raw=TRUE")
+  devtools::source_url("https://raw.githubusercontent.com/gcarrghub/BV-Shiny/master/shinyFromGIT.R?raw=TRUE")
+}
+#### The latest version of this file can be found at the link below
 #### Just click on the same file named shinyFromGIT.R to see the code, then copy-paste
 #### into any R script window
-#### See the file directly by this link:  
+#### See the file directly by this link in plain text:
+#### https://raw.githubusercontent.com/gcarrghub/BV-Shiny/master/shinyFromGIT.R
+#### or in a code-formatted window:
 #### https://github.com/gcarrghub/BV-Shiny/blob/master/shinyFromGIT.R
+#### From this view, right click on the "Raw" button to save to a local file
 
 #### Example data are at 
 #### https://github.com/gcarrghub/BV-Shiny/blob/master/BV%20paper%20data.xlsx
