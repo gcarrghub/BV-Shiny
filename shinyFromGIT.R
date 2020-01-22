@@ -6,7 +6,7 @@
 #### If defaults are satisfied (chrome or firefox are your default browser) devtools installed), should be able to just do the following:
 dtCheck <- require(devtools)
 if(!dtCheck)install.packages("devtools", repos = "https://cran.rstudio.com/", dependencies=TRUE)
-#### Following is a one-liner that will launch the tool by the defaults of this script
+#### Following are two equivalent one-liners that will launch the tool by the defaults of this script
 if(FALSE){
   devtools::source_url("https://github.com/gcarrghub/BV-Shiny/blob/master/shinyFromGIT.R?raw=TRUE")
   devtools::source_url("https://raw.githubusercontent.com/gcarrghub/BV-Shiny/master/shinyFromGIT.R?raw=TRUE")

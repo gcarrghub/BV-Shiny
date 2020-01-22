@@ -4,7 +4,7 @@ options(java.parameters = "-Xss2560k")
 
 shinyUI(
      fluidPage(
-          titlePanel(HTML("<h1><strong>Environmental Safety Bruce-Versteeg Tool</strong></h1><h4>Version 2.0</h4>"), 
+          titlePanel(HTML("<h1><strong>Bruce-Versteeg Model in Environmental Safety</strong></h1><h4>Version 2.0</h4><h4>Running from github repository https://github.com/gcarrghub/BV-Shiny</h4>"), 
                      windowTitle = "Environmental Safety Bruce-Versteeg Tool"),
           fluidRow(
                
@@ -36,15 +36,19 @@ shinyUI(
                     width=9,
                     tabsetPanel(id="tabs",
                                 tabPanel("Help/Documentation",
-                                         h4("Requires Firefox or Chrome browsers.  If this page opens in anything else, copy-paste the full link/address into Chrome or Firefox."),
+                                         h3("Requires Firefox or Chrome browser."),
+                                         h4("If this page opens in anything else, simply copy-paste the full link/address into the Chrome or Firefox address bar."),
+                                         h4("Your R session will also give the same address in a message that should look like 'Listening on http://127.0.0.1:XXXX'"),
+                                         tags$li("It's even OK to have multiple sessions open that point to the same address ;-)"),
                                          br(),
-                                         strong("Purpose of the Tool"),
-                                         p("Estimate the concentration that results in a given effect level, as a percentage of the average response of untreated controls, by methods described in 
+                                         strong("Purpose of the Tool:  "),
+                                         "Estimate the concentration that results in a given effect level, as a percentage of the average response of untreated controls, by methods described in 
                                               Bruce and Versteeg, ETC 1992.  This analysis is appropriate for experiments in which a continuous response is measured on each individual or 
                                               experimental unit, such as a body weight, or possibly for groups of individuals, such as counts of algae in a vessel.  The response level must decline as 
-                                              toxicity (the exposure level) increases."),
-                                         p(strong("This tool is developed for continuous positive value responses such as body weights (NOT counts such as mortality)."),
-                                           "  Proper usage is the sole responsibility of the user.  No warranty is made or implied.  Constructive feedback is appreciated."),
+                                              toxicity (the exposure level) increases.",
+                                         tags$ul(
+                                         tags$li(strong("This tool is developed for continuous positive value responses such as body weights (NOT counts such as from mortality endpoints).")),
+                                         tags$li("Proper usage is the sole responsibility of the user.  No warranty is made or implied, but we appreciate constructive feedback.")),
                                          br(),
                                          column(
                                               width=8,
