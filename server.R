@@ -8,6 +8,7 @@ library(openxlsx)
 if(dir.exists("www")){
         #delete leftover files if they are present from previous runs
         #this only really matter when the repository is set up in rstudio and run inside of rstudio in usual way
+        #as far as I can tell, launching by runGitHub(...) creates temporary space that is removed at completion
         pdfFiles <- list.files(path="www",pattern = "pdf$",full.names = TRUE)
         pngFiles <- list.files(path="www",pattern = "png$",full.names = TRUE)
         xlsxFiles <- list.files(path="www",pattern = "xlsx$",full.names = TRUE)
@@ -248,7 +249,7 @@ shinyServer(function(input, output, session, clientData) {
                setProgress(message = "Please Wait")
                varFixed <- input$varFixed
                source("BVFunction2-0.R", local = TRUE)
-               
+               if(input$debugPrint)print(paste("Working directory:",getwd()))
                setProgress(detail = "Running analysis and creating pdf")
                pdffilename <- getPDFfilename()
                pdf(pdffilename, width = 9)
