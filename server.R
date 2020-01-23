@@ -162,16 +162,18 @@ shinyServer(function(input, output, session, clientData) {
      })
      
      output$zeroCond <- renderUI({
-          req(dataOrg()$BVdata)
-          df <- dataOrg()$BVdata
-          if(any(df$y <= 0)){
-                  if(!is.null(input$zeroOptSelect)){#don't do following unless selection has been made....
-                          if(input$zeroOptSelect=='Replace'){
-                                  return(textInput("zeroSub","Value to Substitute for <=0",value=NULL))
-                          }
-                  }
-          }
-          return(NULL)
+             req(dataOrg()$BVdata)
+             df <- dataOrg()$BVdata
+             if(any(df$y <= 0)){
+                     if(length(input$zeroOptSelect)>0){#don't do following unless selection has been made....
+                             if(input$zeroOptSelect!=" "){
+                                     if(input$zeroOptSelect=='Replace'){
+                                             return(textInput("zeroSub","Value to Substitute for <=0",value=NULL))
+                                     }
+                             }
+                     }
+             }
+             return(NULL)
      })
      
      output$ycolUI <- renderUI({
@@ -200,29 +202,33 @@ shinyServer(function(input, output, session, clientData) {
      })
      
      output$button <- renderUI({
-
-          if(is.null(input$zeroOptSelect)){
-               return(actionButton("updateRes","Calculate the Results"))
-          } else {
-               #if(zeros){
-               if(values$zeros){
-                    if(input$zeroOptSelect=="Ignore"){
-                         return(actionButton("updateRes","Calculate the Results"))
-                    } else if(input$zeroOptSelect=="Replace"){
-                         if(input$zeroSub==""){
-                              return(p("Please enter a value to replace observations <=0.", style="color:red"))
-                         } else if(input$zeroSub!=""){
-                              return(actionButton("updateRes","Calculate the Results"))
-                         }
-                    } else {
-                         return(p("Please enter an option for handling values <=0.", style="color:red"))
-                    }	
-               }
-               if(!values$zeros){
-                    
-                    return(actionButton("updateRes","Calculate the Results"))
-               } 	
-          }
+             # if no zero options stuff it means ready to go as is
+             if(is.null(input$zeroOptSelect)){
+                     return(actionButton("updateRes","Calculate the Results"))
+             } else {
+                     # zeros were found, user MUST choose action
+                     if(values$zeros){
+                             if(input$zeroOptSelect!="Ignore" & input$zeroOptSelect!="Replace"){
+                                     return(p("Select an option on observations <=0.", style="color:red"))
+                             }
+                             if(input$zeroOptSelect=="Ignore"){
+                                     return(actionButton("updateRes","Calculate the Results"))
+                             } else if(input$zeroOptSelect=="Replace"){
+                                     if(is.null(input$zeroSub)){
+                                             return(p("Please enter a value to replace observations <=0.", style="color:red"))
+                                     } else if(input$zeroSub==""){
+                                             return(p("Please enter a value to replace observations <=0.", style="color:red"))
+                                     } else if(input$zeroSub!=""){
+                                             return(actionButton("updateRes","Calculate the Results"))
+                                     }
+                             } else {
+                                     return(p("Please enter an option for handling values <=0.", style="color:red"))
+                             }	
+                     }
+                     if(!values$zeros){
+                             return(actionButton("updateRes","Calculate the Results"))
+                     } 	
+             }
      })
      
      output$DataTab <- renderTable({
