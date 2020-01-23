@@ -3,20 +3,53 @@
 ####                                        # 
 
 ####
-#### If defaults are satisfied (chrome or firefox are your default browser) devtools installed), should be able to just do the following:
-dtCheck <- require(devtools)
-if(!dtCheck)install.packages("devtools", repos = "https://cran.rstudio.com/", dependencies=TRUE)
-#### Following are two equivalent one-liners that will launch the tool by the defaults of this script
+#### In all cases, should be able to just do the following (as in, the equivalent to sourcing the file)
+#### Details given in if(FALSE){} blocks are details details
+#### Before running the tool need to check for required packages and install if necessary
+#### Typically should only need to do this once per installation of R
+packages = c("shiny", "dplyr", "gridExtra", "openxlsx", "optimx", "plotrix","devtools")
+packageTests <- sapply(packages,FUN = require,character.only=TRUE)
+if(all(packageTests)){
+  cat("\n",paste(rep("#",100),collapse = ""),
+      "\n  All required packages are present.",
+      "\n",paste(rep("#",100),collapse = ""),"\n")
+}
+if(sum(!packageTests)>0){
+  cat("\n",paste(rep("#",100),collapse = ""),
+      "\n  Please wait while required packages are installed.",
+      "\n  Requires internet access and sufficient rights to install R packages on your system.",
+      "\n",paste(rep("#",100),collapse = ""),"\n")
+  install.packages(packages[!packageTests], repos = "https://cran.rstudio.com/", dependencies=TRUE)
+  ### In one case, needed to add this to a users install.packages call:  INSTALL_opts = c('--no-lock')
+  # recheck for packages
+  packageTests <- sapply(packages,FUN = require,character.only=TRUE)
+  if(all(packageTests)){
+    cat("\n",paste(rep("#",100),collapse = ""),
+        "\n  All required packages were successfully installed.",
+        "\n",paste(rep("#",100),collapse = ""),"\n")
+  }
+  if(!all(packageTests)){
+    cat("\n",paste(rep("#",100),collapse = ""),
+        "\n  Not all packages were successfully installed.",
+        "\n",paste(names(packageTests[!packageTests]),collapse = " "),
+        "\n",paste(rep("#",100),collapse = ""),"\n")
+  }
+}
+
 if(FALSE){
+  #can use this command to download a copy of the data -- only works inside of rstudio
+  if(!require("rstudioapi"))install.packages("rstudioapi")
+  downloadName <- "BVdemoData.xlsx"
+  # select the directory where to put it, even if it is the one that opens first
+  download.file("https://github.com/gcarrghub/BV-Shiny/raw/master/BV%20paper%20data.xlsx",
+                destfile = paste(rstudioapi::selectDirectory(path = getwd()),downloadName,sep="/"))
+  #one-liners that can be shared to launch the tool.  They all source this file, and should work
+  #independent of OS, or R session from which it is run (terminal, Rgui, Rstudio).  Links will
+  #show contents of this file, when used in a browser
   devtools::source_url("https://raw.github.com/gcarrghub/BV-Shiny/master/shinyFromGIT.R")
   devtools::source_url("https://github.com/gcarrghub/BV-Shiny/blob/master/shinyFromGIT.R?raw=TRUE")
   devtools::source_url("https://raw.githubusercontent.com/gcarrghub/BV-Shiny/master/shinyFromGIT.R?raw=TRUE")
 }
-#### The latest version of this file can be found at the link below
-#### Just click on the same file named shinyFromGIT.R to see the code, then copy-paste
-#### into any R script window.
-#### See the file directly by this link in plain text:
-#### https://raw.github.com/gcarrghub/BV-Shiny/master/shinyFromGIT.R
 #### or in a code-formatted window:
 #### https://github.com/gcarrghub/BV-Shiny/blob/master/shinyFromGIT.R
 #### From this view, right click on the "Raw" button to save to a local file
@@ -29,13 +62,6 @@ if(FALSE){
 #### see https://happygitwithr.com/, https://www.r-bloggers.com/rstudio-and-github/
 
 
-#### Run these lines first to check for required packages and install if necessary
-#### Typically should only need to do this once
-packages = c("shiny", "dplyr", "gridExtra", "openxlsx", "optimx", "plotrix")
-packageTests <- sapply(packages,FUN = require,character.only=TRUE)
-if(sum(!packageTests)>0)install.packages(packages[!packageTests], repos = "https://cran.rstudio.com/", dependencies=TRUE)
-### In rare cases, if package installation returns errors related to 00LOCK... folder/file, this may work (no promises)
-if(FALSE)install.packages(packages[!packageTests], repos = "https://cran.rstudio.com/", dependencies=TRUE, INSTALL_opts = c('--no-lock'))
 
 ### once the packages above are installed
 ### the tool will run with only these two lines
