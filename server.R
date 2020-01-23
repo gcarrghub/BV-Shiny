@@ -134,16 +134,19 @@ shinyServer(function(input, output, session, clientData) {
      dataOrgZeroFixed <- reactive({
           req(dataOrg()[["BVdata"]])
           BVdata <- dataOrg()[["BVdata"]]
-          if(!is.null(input$zeroOptSelect)){
-               if(input$zeroOptSelect == "Ignore"){
-                    
-                    BVdata <- BVdata %>% filter(y > 0)
-               }
-               if(input$zeroOptSelect == "Replace"){
-                    
-                    BVdata$y <- ifelse(BVdata$y <= 0, as.numeric(input$zeroSub), BVdata$y)
-               }
-          }
+          ### Important change:  If variance is constant, do not need to remove/delete <=0
+          ### So when constant is chosen, "Ignore" will mean just keep the value, or you could still change it with "Replace"
+          ### The user will still have to choose something.
+          if(!is.null(input$zeroOptSelect) & !input$varFixed){
+                          if(input$zeroOptSelect == "Ignore"){
+                                  
+                                  BVdata <- BVdata %>% filter(y > 0)
+                          }
+                          if(input$zeroOptSelect == "Replace"){
+                                  
+                                  BVdata$y <- ifelse(BVdata$y <= 0, as.numeric(input$zeroSub), BVdata$y)
+                          }
+                  }
           return(BVdata)
      })
      
