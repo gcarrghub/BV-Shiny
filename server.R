@@ -164,11 +164,12 @@ shinyServer(function(input, output, session, clientData) {
      output$zeroCond <- renderUI({
           req(dataOrg()$BVdata)
           df <- dataOrg()$BVdata
-          
           if(any(df$y <= 0)){
-               if(input$zeroOptSelect=='Replace'){
-                    return(textInput("zeroSub","Value to Substitute for <=0",value=NULL))
-               }
+                  if(!is.null(input$zeroOptSelect)){#don't do following unless selection has been made....
+                          if(input$zeroOptSelect=='Replace'){
+                                  return(textInput("zeroSub","Value to Substitute for <=0",value=NULL))
+                          }
+                  }
           }
           return(NULL)
      })
