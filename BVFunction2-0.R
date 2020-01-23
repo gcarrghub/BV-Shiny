@@ -413,8 +413,10 @@ fitBV.PLL <- function(
   }
   #the previous problems are worthy of a stop at this point
   stopError <- FALSE
-  print(msgText)
-  if(nchar(msgText)>0)stopError <- TRUE
+  if(nchar(msgText)>0){
+    stopError <- TRUE
+    print(msgText)
+  }
   #fix zeros
   if(!is.null(zeroSub)){
     if(any(BVdata$y<=0))msgText<-ifelse(nchar(msgText)>0,yes=paste(msgText,paste("Zero values reset to",zeroSub),sep=" // "),no=paste("Zero values reset to",zeroSub))
@@ -857,7 +859,11 @@ fitBV.PLL <- function(
   if(regexpr("error",class(upperCIbounds))<0 & upperCIbounds[3]==0){
     if(verbose){
       print("trying to extend upper bound")
+<<<<<<< HEAD
       print(upperCIbounds) 
+=======
+      print(upperCIbounds)
+>>>>>>> 4f872135bdec9812c6e6d6761544dc1f64bbd277
     }
     #upperCIbounds[1:2]+c(0,1) extends the interval upwards, and, using extendInt = "upX" tells uniroot to keep looking even beyond
     #until it gives up (usually that will mean an error that the LL cant be calculated)
