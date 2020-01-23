@@ -16,7 +16,8 @@ if(all(packageTests)){
 }
 if(sum(!packageTests)>0){
   cat("\n",paste(rep("#",100),collapse = ""),
-      "\n  Please wait while required packages are installed.",
+      "\n  Please wait while these required packages and their dependencies are installed:",
+      "\n   ",paste(names(packageTests[!packageTests]),collapse = " "),
       "\n  Requires internet access and sufficient rights to install R packages on your system.",
       "\n",paste(rep("#",100),collapse = ""),"\n")
   install.packages(packages[!packageTests], repos = "https://cran.rstudio.com/", dependencies=TRUE)
@@ -30,8 +31,8 @@ if(sum(!packageTests)>0){
   }
   if(!all(packageTests)){
     cat("\n",paste(rep("#",100),collapse = ""),
-        "\n  Not all packages were successfully installed.",
-        "\n",paste(names(packageTests[!packageTests]),collapse = " "),
+        "\n  Not all packages were successfully installed:",
+        "\n   ",paste(names(packageTests[!packageTests]),collapse = " "),
         "\n",paste(rep("#",100),collapse = ""),"\n")
   }
 }

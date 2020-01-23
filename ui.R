@@ -20,7 +20,7 @@ shinyUI(
                          br(),
                          sliderInput("ECXvalue","ECx Value",0.05,.95,.5,step=0.025),
                          br(),
-                         checkboxInput("varFixed","Assume variance of response is fixed across doses"),
+                         checkboxInput("varFixed","Assume variance of response is constant across doses"),
                          uiOutput("zeroOpt"),
                          uiOutput("zeroCond"),
                          #textInput("zeroSub","Values to Substitute for Zero (when applicable)",value=NULL),
@@ -58,7 +58,7 @@ shinyUI(
                                                  'Choose File' button in the grey panel at left. Verify data in the 'Data For Analysis' tab."),
                                                    tags$li("Select the desired Effect Level using the slider (effect is %DECREASE from control level) eg, 0.20 is for the concentration resulting in at 20% decrease in the response level.  
                                                       This program attempts to limit this selection to levels plausible for the range of responses observed."),
-                                                   tags$li("If it is reasonable to assume the variance of the response is fixed across doses, check the box in the panel."),
+                                                   tags$li("If it is reasonable to assume the variance of the response is constant across doses, check the box in the panel."),
                                                    tags$li("Click the Results tab to go to the results page, then click Calculate the Results button in the grey panel.  Both PDF and Excel versions of output can be downloaded at the bottom of results.  If data were provided in Excel, the entire
                                               Excel workbook is returned, plus two sheets with results.")
                                               ),br(),

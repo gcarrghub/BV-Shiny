@@ -254,6 +254,12 @@ shinyServer(function(input, output, session, clientData) {
                pdffilename <- getPDFfilename()
                pdf(pdffilename, width = 9)
                par(mai=c(1,1,1,0.1))
+               #remove fit-related objects in global environment before each run
+               fitOBJs <- c("bestParsEC50","bestParsECx","bestParsLL",
+                              "fBasedCritVal","goodFlag","lowerCI",
+                              "upperCI")
+               checkOBJs <- sapply(fitOBJs,FUN = exists,envir = .GlobalEnv)
+               if(any(checkOBJs))remove(list=fitOBJs[checkOBJs],envir = .GlobalEnv)
                results <- fitBV.PLL (
                     BVdata=dataOrgZeroFixed(),
                     ECXvalue=input$ECXvalue,
