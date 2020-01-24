@@ -7,8 +7,10 @@ library(openxlsx)
 
 if(dir.exists("www")){
         #delete leftover files if they are present from previous runs
-        #this only really matter when the repository is set up in rstudio and run inside of rstudio in usual way
-        #as far as I can tell, launching by runGitHub(...) creates temporary space that is removed at completion
+        #this only matters when the repository is set up in rstudio
+        #and run inside of rstudio in usual way.  When the tool is run
+        #through a runGitHub(...) command, it creates temporary space 
+        #that is removed on completion (the tool implementation is killed)
         pdfFiles <- list.files(path="www",pattern = "pdf$",full.names = TRUE)
         pngFiles <- list.files(path="www",pattern = "png$",full.names = TRUE)
         xlsxFiles <- list.files(path="www",pattern = "xlsx$",full.names = TRUE)
@@ -28,7 +30,7 @@ shinyServer(function(input, output, session, clientData) {
      # }
      # )
      
-     ### Data read in 
+     ### Check the file extension so the program will know how to read it in 
      getFileExt <- reactive({
           # Read in the .csv input data
           inFile <- input$inputFile
@@ -39,7 +41,8 @@ shinyServer(function(input, output, session, clientData) {
           } else return(NULL)
      })
      
-     
+     ### If it is xls or xlsx, select the sheet to use
+     ### By default, the first (or only if the case) sheet is selected
      output$sheetUI <- renderUI({
           fileExt <- getFileExt()
           #if(debugTF)print(fileExt)
@@ -72,6 +75,7 @@ shinyServer(function(input, output, session, clientData) {
           
      })
      
+     ### read in the data, depending on type as given by file extension
      getData <- reactive({
           req(input$inputFile)
           inFile <- input$inputFile
@@ -102,14 +106,21 @@ shinyServer(function(input, output, session, clientData) {
           
      })
 
+     ### Once the data has been selected, set it up for analysis,
+     ### which is to say identify the dose and response variables,
+     ### and check for zeros
      dataOrg <- reactive({
-          req(getData())
+          ### getData(), above, is how to read the file
+          ### req(getData()) is to say don't go further 
+          ### unless it has returned the data..
+          shiny::req(getData())
           
           namesInp <- names(getData())
-          #print(namesInp)
+          #If the expected names are present, assume we are good to go
           if(all(c("y","dose") %in% namesInp)){
                BVdata <- getData()[,c("y","dose")]
           }
+          #If not, user has to choose which vars to use
           if(!(all(c("y","dose") %in% namesInp))){
                dataDirty <- getData()
                ## Have to make sure the UI is generated before I subset.
@@ -118,7 +129,7 @@ shinyServer(function(input, output, session, clientData) {
                names(BVdata) <- c("y","dose")
           }
 
-          
+          ### set flag on whether zeros are present
           if(any(BVdata$y <= 0)){
                values$zeros <- TRUE
           } else {
@@ -131,44 +142,43 @@ shinyServer(function(input, output, session, clientData) {
           return(list(BVdata=BVdata,fBasedCritVal=fBasedCritVal,nzDoses=nzDoses))
      })
      
-     dataOrgZeroFixed <- reactive({
-          req(dataOrg()[["BVdata"]])
-          BVdata <- dataOrg()[["BVdata"]]
-          ### Important change:  If variance is constant, do not need to remove/delete <=0
-          ### So when constant is chosen, "Ignore" will mean just keep the value, or you could still change it with "Replace"
-          ### The user will still have to choose something.
-          if(!is.null(input$zeroOptSelect) & !input$varFixed){
-                          if(input$zeroOptSelect == "Ignore"){
-                                  
-                                  BVdata <- BVdata %>% filter(y > 0)
-                          }
-                          if(input$zeroOptSelect == "Replace"){
-                                  
-                                  BVdata$y <- ifelse(BVdata$y <= 0, as.numeric(input$zeroSub), BVdata$y)
-                          }
-                  }
-          return(BVdata)
-     })
      
+     ### When zeros are present, modify the lefthand data section to open
+     ### a drop-down selection of choices to handle zero values 
+     ### (the Ignore or Replace drop-down)
      output$zeroOpt <- renderUI({
-          req(dataOrg()[["BVdata"]])
-          df <- dataOrg()[["BVdata"]]
-          if(values$zeros){
-               return(selectInput("zeroOptSelect","Select an option for handling values <=0", choices=c(" ","Ignore","Replace")))
-          } else {
-               return(NULL)
-          }
-          
+             shiny::req(dataOrg()[["BVdata"]],input$varFixed)
+             df <- dataOrg()[["BVdata"]]
+             if(values$zeros & !as.logical(input$varFixed)){
+                     return(radioButtons("zeroOptSelect","Action on values <= 0",
+                                         choices=c("Ignore","Replace"),
+                                         inline=TRUE,
+                                         width="100%",selected = "Ignore")
+                     )
+                     #return(selectInput("zeroOptSelect","Select an option for handling values <=0", choices=c(" ","Ignore","Replace")))
+             } else if(values$zeros & as.logical(input$varFixed)){
+                     return(radioButtons("zeroOptSelect","Action on values <= 0",
+                                         choices=c("Ignore","Keep"),
+                                         inline=TRUE,
+                                         width="100%",selected = "Ignore")
+                     )
+                     #return(selectInput("zeroOptSelect","Select an option for handling values <=0", choices=c(" ","Ignore","Replace")))
+             } else {
+                     return(NULL)
+             }
      })
      
+     ### and after the drop-down selection, either drop the zeros completely,
+     ### or open a field for value entry if user has selected "Replace"
+     ### When "Replace" is selected, open a text entry box for the new value
      output$zeroCond <- renderUI({
-             req(dataOrg()$BVdata)
+             shiny::req(dataOrg()$BVdata)
              df <- dataOrg()$BVdata
              if(any(df$y <= 0)){
                      if(length(input$zeroOptSelect)>0){#don't do following unless selection has been made....
                              if(input$zeroOptSelect!=" "){
                                      if(input$zeroOptSelect=='Replace'){
-                                             return(textInput("zeroSub","Value to Substitute for <=0",value=NULL))
+                                             return(textInput("zeroSub","Replacement for values <=0",value=NULL))
                                      }
                              }
                      }
@@ -176,68 +186,84 @@ shinyServer(function(input, output, session, clientData) {
              return(NULL)
      })
      
+     ### This implements the changes to BVdata when Ignore or Replace is selected
+     dataOrgZeroFixed <- reactive({
+             #BVdata has to be present in output from dataOrg to continue
+             #print(c(varFixed=as.logical(input$varFixed)))
+             shiny::req(dataOrg()[["BVdata"]],!is.null(input$zeroOptSelect),!is.null(input$varFixed))
+             BVdata <- dataOrg()[["BVdata"]]
+             ### Important change:  If variance is constant, do not need to remove/delete <=0
+             ### So when constant is chosen, "Ignore" will mean just keep the value, 
+             ### or you could still change it with "Replace", in which case
+             ### the user will still have to choose something.
+             #if(!is.null(input$zeroOptSelect)){
+                     if(input$zeroOptSelect == "Ignore"){
+                             BVdata <- BVdata %>% filter(y > 0)
+                     }
+                     if(input$zeroOptSelect == "Replace"){
+                             BVdata$y <- ifelse(BVdata$y <= 0, as.numeric(input$zeroSub), BVdata$y)
+                     }
+             #}
+             return(BVdata)
+     })
+     
+     ### When there is not a column named "y", select one as the responses
      output$ycolUI <- renderUI({
-          req(getData())
+          shiny::req(getData())
           namesInp <- names(getData())
           if(all(c("y","dose") %in% namesInp)){
                NULL
           } else {
                namesInFrame <- names(getData())
-               return(selectInput(inputId="nameYCol","Select Response Variable",namesInFrame,namesInFrame[1]))
-               
+               return(selectInput(inputId="nameYCol","Select Response Variable",
+                                  namesInFrame,namesInFrame[1]))
           }
      })
      
-     
+     ### When there is not a column named "dose", select one as the doses
      output$doseColUI <- renderUI({
-          req(getData())
+          shiny::req(getData())
           namesInp <- names(getData())
           if(all(c("y","dose") %in% namesInp)){
                NULL
           } else {
                namesInFrame <- names(getData())
-               return(selectInput(inputId="nameDoseCol","Select Concentration Variable",namesInFrame,namesInFrame[2]))
-               
+               return(selectInput(inputId="nameDoseCol","Select Concentration Variable",
+                                  namesInFrame,namesInFrame[2]))
           }     
      })
      
+     #Controls when the button that runs the analysis is available.  It is
+     #taken away, for example, when zeros are present.
      output$button <- renderUI({
              # if no zero options stuff it means ready to go as is
+             # zeroOptSelect will be NULL when there are no zeros in the data,
+             # or when an action to deal with zeros has not be selected.
+             # This is not foolproof.  The run button will show if, for 
+             # example, the replacment is itself <= 0, or a non-numeric string.
+             #print(c(zeroOptSelect=input$zeroOptSelect,zeroSub=input$zeroSub))
              if(is.null(input$zeroOptSelect)){
                      return(actionButton("updateRes","Calculate the Results"))
-             } else {
-                     # zeros were found, user MUST choose action
-                     if(values$zeros){
-                             if(input$zeroOptSelect!="Ignore" & input$zeroOptSelect!="Replace"){
-                                     return(p("Select an option on observations <=0.", style="color:red"))
-                             }
-                             if(input$zeroOptSelect=="Ignore"){
-                                     return(actionButton("updateRes","Calculate the Results"))
-                             } else if(input$zeroOptSelect=="Replace"){
-                                     if(is.null(input$zeroSub)){
-                                             return(p("Please enter a value to replace observations <=0.", style="color:red"))
-                                     } else if(input$zeroSub==""){
-                                             return(p("Please enter a value to replace observations <=0.", style="color:red"))
-                                     } else if(input$zeroSub!=""){
-                                             return(actionButton("updateRes","Calculate the Results"))
-                                     }
-                             } else {
-                                     return(p("Please enter an option for handling values <=0.", style="color:red"))
-                             }	
-                     }
-                     if(!values$zeros){
-                             return(actionButton("updateRes","Calculate the Results"))
-                     } 	
              }
-     })
+             if(!is.null(input$zeroOptSelect)){
+                     if(input$zeroOptSelect!="Replace")return(actionButton("updateRes","Calculate the Results"))
+                     if(input$zeroOptSelect=="Replace"){
+                             if(nchar(input$zeroSub)==0)return(p("Please enter a value to replace observations <=0.", style="color:red"))
+                             if(nchar(input$zeroSub)> 0)return(actionButton("updateRes","Calculate the Results"))
+                     }
+             }
+             })
      
+     ### In the data tab, show the data!
      output$DataTab <- renderTable({
           dataOrgZeroFixed()
      })
      
+     ### show the plot for output
      output$plot <- renderPlot({
           values$cleanplot
      })
+     
      
      getShortFileName <- reactive({
           paste0("BVoutput", values$stamp)
@@ -251,13 +277,14 @@ shinyServer(function(input, output, session, clientData) {
           paste0("www/", getShortFileName(), ".xlsx")
      })
 
+     ### the analysis process.
      observeEvent(input$updateRes, {
           updateTabsetPanel(session, "tabs", "Results")
           values$stamp <- format(Sys.time(), "%Y%m%d%H%M%S")
           
           withProgress({
                setProgress(message = "Please Wait")
-               varFixed <- input$varFixed
+               varFixed <- as.logical(input$varFixed)
                source("BVFunction2-0.R", local = TRUE)
                if(input$debugPrint)print(paste("Working directory:",getwd()))
                setProgress(detail = "Running analysis and creating pdf")
@@ -278,7 +305,7 @@ shinyServer(function(input, output, session, clientData) {
                     do3Dstart=FALSE,
                     FORCE=FALSE,
                     zeroSub=NULL,
-                    varFixed=input$varFixed,
+                    varFixed=as.logical(input$varFixed),
                     ylabel = input$ylab,
                     xlabel = input$xlab)
                grid.newpage()
@@ -409,17 +436,19 @@ shinyServer(function(input, output, session, clientData) {
           })
      })
      
+     ### (I think) whenever the data change, update the data tab
      observeEvent(dataOrgZeroFixed(), {
           updateTabsetPanel(session,"tabs", "Data For Analysis")
      })
      
+     ### create the download link for the plots in pdf
      output$downloadPlot <- downloadHandler( 
           filename=paste0(getShortFileName(), ".pdf"),
           content=function(file){
                file.copy(getPDFfilename(), file)
           }   
      )
-     
+     ### create the download link for the excel file
      output$downloadResults <- downloadHandler( 
           filename=paste0(getShortFileName(), ".xlsx"),
           content=function(file){
@@ -427,8 +456,10 @@ shinyServer(function(input, output, session, clientData) {
           }   
      )
      
+     ### the example data that are displayed with instructions for the tool
      output$sampleData <- renderTable({ 
-          data.frame(y=c(120.9,118,134,121.2,118.6,120.4,82.6,62.8,81.6,49.3,41.6,41.3,12.7,14.7,14.7,4.93,4,4.4),
-                          doses=c(0,0,0,5,5,5,10,10,10,20,20,20,40,40,40,80,80,80))
+          data.frame(y=c(120.9,118,134,121.2,118.6,120.4,82.6,62.8,
+                         81.6,49.3,41.6,41.3,12.7,14.7,14.7,4.93,4,4.4),
+                doses=c(0,0,0,5,5,5,10,10,10,20,20,20,40,40,40,80,80,80))
      }, include.rownames=FALSE)
 })
