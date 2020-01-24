@@ -255,7 +255,8 @@ plotBV.LOG <- function(
          sapply(unique(dose),FUN = function(xdose){
            yPts <- y[dose==xdose]
            xPts <- dose[dose==xdose]
-           points(y=yPts,x=sample(xPts*(10^(jitterFactor*seq(-1,1,length=length(yPts))))),cex=1.3)
+           if(length(yPts)>1)points(y=yPts,x=sample(xPts*(10^(jitterFactor*seq(-1,1,length=length(yPts))))),cex=1.3)
+           if(length(yPts)==1)points(y=yPts,x=xPts,cex=1.3)
          })
          
        })
