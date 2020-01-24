@@ -151,16 +151,16 @@ shinyServer(function(input, output, session, clientData) {
              df <- dataOrg()[["BVdata"]]
              if(values$zeros & !as.logical(input$varFixed)){
                      return(radioButtons("zeroOptSelect","Action on values <= 0",
-                                         choices=c("Ignore","Replace"),
+                                         choices=c("Drop","Replace"),
                                          inline=TRUE,
-                                         width="100%",selected = "Ignore")
+                                         width="100%",selected = "Replace")
                      )
                      #return(selectInput("zeroOptSelect","Select an option for handling values <=0", choices=c(" ","Ignore","Replace")))
              } else if(values$zeros & as.logical(input$varFixed)){
                      return(radioButtons("zeroOptSelect","Action on values <= 0",
-                                         choices=c("Ignore","Keep"),
+                                         choices=c("Drop","Keep"),
                                          inline=TRUE,
-                                         width="100%",selected = "Ignore")
+                                         width="100%",selected = "Keep")
                      )
                      #return(selectInput("zeroOptSelect","Select an option for handling values <=0", choices=c(" ","Ignore","Replace")))
              } else {
@@ -197,7 +197,7 @@ shinyServer(function(input, output, session, clientData) {
              ### or you could still change it with "Replace", in which case
              ### the user will still have to choose something.
              #if(!is.null(input$zeroOptSelect)){
-                     if(input$zeroOptSelect == "Ignore"){
+                     if(input$zeroOptSelect == "Drop"){
                              BVdata <- BVdata %>% filter(y > 0)
                      }
                      if(input$zeroOptSelect == "Replace"){
@@ -344,10 +344,14 @@ shinyServer(function(input, output, session, clientData) {
                
                output$messages <- renderUI({
                     if(values$zeros){
-                         if(input$zeroOptSelect == "Ignore"){
-                              negmessage <- "Values <= 0 have been ignored in the analysis."
-                         } else if(input$zeroOptSelect == "Replace"){
-                              negmessage <- paste0("Values <= 0 have been replaced with ", input$zeroSub, ".")
+                            if(input$zeroOptSelect == "Drop"){
+                                    negmessage <- "Some values <= 0 have been dropped from the analysis."
+                            }
+                            if(input$zeroOptSelect == "Keep"){
+                                    negmessage <- "Some values <= 0 are included in the analysis."
+                                 }
+                            if(input$zeroOptSelect == "Replace"){
+                                        negmessage <- paste0("All values <= 0 have been replaced with ", input$zeroSub, ".")
                          }
                     } else {
                          negmessage <- "There are no response values <= 0 in the analyzed dataset."
