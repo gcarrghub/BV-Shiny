@@ -1,6 +1,7 @@
 library(shiny)
 
-options(java.parameters = "-Xss2560k")
+# don't think we need this since dropping java-based XLconnect
+#options(java.parameters = "-Xss2560k")
 
 shinyUI(
      fluidPage(
@@ -13,7 +14,7 @@ shinyUI(
                     wellPanel(
                          p("Enter the data you wish to analyze"),
                          #progressInit(),
-                         fileInput('inputFile', 'Choose File', multiple=FALSE),
+                         shiny::fileInput(inputId = 'inputFile', label = 'Choose File', multiple = FALSE,placeholder = "Select a file"),
                          uiOutput("sheetUI"),
                          uiOutput("ycolUI"),
                          uiOutput("doseColUI"),
