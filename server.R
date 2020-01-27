@@ -112,9 +112,8 @@ shinyServer(function(input, output, session, clientData) {
      dataOrg <- reactive({
           ### getData(), above, is how to read the file
           ### req(getData()) is to say don't go further 
-          ### unless it has returned the data..
+          ### unless it returns data..
           shiny::req(getData())
-          
           namesInp <- names(getData())
           #If the expected names are present, assume we are good to go
           if(all(c("y","dose") %in% namesInp)){
@@ -217,28 +216,35 @@ shinyServer(function(input, output, session, clientData) {
      
      ### When there is not a column named "y", select one as the responses
      output$ycolUI <- renderUI({
-          shiny::req(getData())
-          namesInp <- names(getData())
-          if(all(c("y","dose") %in% namesInp)){
-               NULL
-          } else {
-               namesInFrame <- names(getData())
-               return(selectInput(inputId="nameYCol","Select Response Variable",
-                                  namesInFrame,namesInFrame[1]))
-          }
+             shiny::req(getData())
+             namesInFrame <- names(getData())
+             if(all(c("y","dose") %in% namesInFrame)){
+                     NULL
+             } else {
+                     namesChoices <- namesInFrame
+                     #if(is.element("nameDoseCol",names(input))){
+                     #       namesChoices <- namesChoices[namesChoices!=input$nameDoseCol]
+                     #}
+                     return(selectInput(inputId="nameYCol","Select Response Variable",
+                                        namesChoices,namesChoices[1]))
+             }
      })
      
      ### When there is not a column named "dose", select one as the doses
      output$doseColUI <- renderUI({
-          shiny::req(getData())
-          namesInp <- names(getData())
-          if(all(c("y","dose") %in% namesInp)){
-               NULL
-          } else {
-               namesInFrame <- names(getData())
-               return(selectInput(inputId="nameDoseCol","Select Concentration Variable",
-                                  namesInFrame,namesInFrame[2]))
-          }     
+             shiny::req(getData())
+             namesInFrame <- names(getData())
+             if(all(c("y","dose") %in% namesInFrame)){
+                     NULL
+             } else {
+                     namesChoices <- namesInFrame
+                     if(is.element("nameYCol",names(input))){
+                             #this prevents a user from selecting the same column of data for both response and dose
+                             namesChoices <- namesChoices[namesChoices!=input$nameYCol]
+                     }
+                     return(selectInput(inputId="nameDoseCol","Select Concentration Variable",
+                                        namesChoices,namesChoices[1]))
+             }     
      })
      
      #Controls when the button that runs the analysis is available.  It is
