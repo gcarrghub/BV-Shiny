@@ -178,6 +178,8 @@ shinyServer(function(input, output, session, clientData) {
                      if(length(input$zeroOptSelect)>0){#don't do following unless selection has been made....
                              if(input$zeroOptSelect!=" "){
                                      if(input$zeroOptSelect=='Replace'){
+                                             # default value changed from NULL to ""
+                                             # (NULL is harder to deal with, causes silent errors etc)
                                              return(textInput("zeroSub","Replacement value for those <=0",value=""))
                                      }
                              }
@@ -249,8 +251,9 @@ shinyServer(function(input, output, session, clientData) {
                      #only get in here if a <=0 value is detected in the data
                      if(input$zeroOptSelect!="Replace")return(actionButton("updateRes","Calculate the Results"))
                      #zeroSub will be in the input list once a value is begun by the user
+                     #this is facilitated now by making the default value "" instead of NULL
                      if(input$zeroOptSelect=="Replace" & is.element("zeroSub",names(input))){
-                             print(c(zeroOptSelect=input$zeroOptSelect,zeroSub=input$zeroSub))
+                             #print(c(zeroOptSelect=input$zeroOptSelect,zeroSub=input$zeroSub))
                              #as long as it's a number >0, will allow the analysis to run
                              ready2go <- FALSE
                              is.a.number <- is.finite(as.numeric(input$zeroSub))
