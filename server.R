@@ -178,7 +178,7 @@ shinyServer(function(input, output, session, clientData) {
                      if(length(input$zeroOptSelect)>0){#don't do following unless selection has been made....
                              if(input$zeroOptSelect!=" "){
                                      if(input$zeroOptSelect=='Replace'){
-                                             return(textInput("zeroSub","Replacement for values <=0",value=NULL))
+                                             return(textInput("zeroSub","Replacement value for those <=0",value=""))
                                      }
                              }
                      }
@@ -246,10 +246,17 @@ shinyServer(function(input, output, session, clientData) {
                      return(actionButton("updateRes","Calculate the Results"))
              }
              if(!is.null(input$zeroOptSelect)){
+                     #only get in here if a <=0 value is detected in the data
                      if(input$zeroOptSelect!="Replace")return(actionButton("updateRes","Calculate the Results"))
-                     if(input$zeroOptSelect=="Replace"){
-                             if(nchar(input$zeroSub)==0)return(p("Please enter a value to replace observations <=0.", style="color:red"))
-                             if(nchar(input$zeroSub)> 0)return(actionButton("updateRes","Calculate the Results"))
+                     #zeroSub will be in the input list once a value is begun by the user
+                     if(input$zeroOptSelect=="Replace" & is.element("zeroSub",names(input))){
+                             print(c(zeroOptSelect=input$zeroOptSelect,zeroSub=input$zeroSub))
+                             #as long as it's a number >0, will allow the analysis to run
+                             ready2go <- FALSE
+                             is.a.number <- is.finite(as.numeric(input$zeroSub))
+                             if(is.a.number){if(as.numeric(input$zeroSub)>0)ready2go <- TRUE}
+                             if(!ready2go)return(p("Please enter a positive value to replace observations <=0.", style="color:red"))
+                             if( ready2go)return(actionButton("updateRes","Calculate the Results"))
                      }
              }
              })
