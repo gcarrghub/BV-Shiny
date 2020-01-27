@@ -80,7 +80,7 @@ shinyServer(function(input, output, session, clientData) {
           req(input$inputFile)
           inFile <- input$inputFile
           if(!is.null(inFile)){
-               
+               values$zeros <- FALSE
                fileExt <- sub(".*\\.","",inFile[1])
                
                ## Use grepl because readWorksheet works with both xls and xlsx versions of wb.
@@ -142,6 +142,32 @@ shinyServer(function(input, output, session, clientData) {
           return(list(BVdata=BVdata,fBasedCritVal=fBasedCritVal,nzDoses=nzDoses))
      })
      
+     ### This implements the changes to BVdata when Ignore or Replace is selected
+     dataOrgZeroFixed <- reactive({
+             #BVdata has to be present in output from dataOrg to continue
+             #print(c(varFixed=as.logical(input$varFixed)))
+             shiny::req(dataOrg()[["BVdata"]])
+             BVdata <- dataOrg()[["BVdata"]]
+             if(!values$zeros) return(BVdata)
+             if(values$zeros){
+                     shiny::req(is.element("zeroOptSelect",names(input)),is.element("varFixed",names(input)))
+                     shiny::req(!is.null(input$zeroOptSelect),!is.null(input$varFixed))
+                     BVdata <- dataOrg()[["BVdata"]]
+                     ### Important change:  If variance is constant, do not need to remove/delete <=0
+                     ### So when constant is chosen, "Ignore" will mean just keep the value, 
+                     ### or you could still change it with "Replace", in which case
+                     ### the user will still have to choose something.
+                     #if(!is.null(input$zeroOptSelect)){
+                     if(input$zeroOptSelect == "Drop"){
+                             BVdata <- BVdata %>% filter(y > 0)
+                     }
+                     if(input$zeroOptSelect == "Replace"){
+                             BVdata$y <- ifelse(BVdata$y <= 0, as.numeric(input$zeroSub), BVdata$y)
+                     }
+                     #}
+                     return(BVdata)
+             }
+     })
      
      ### When zeros are present, modify the lefthand data section to open
      ### a drop-down selection of choices to handle zero values 
@@ -188,26 +214,6 @@ shinyServer(function(input, output, session, clientData) {
              return(NULL)
      })
      
-     ### This implements the changes to BVdata when Ignore or Replace is selected
-     dataOrgZeroFixed <- reactive({
-             #BVdata has to be present in output from dataOrg to continue
-             #print(c(varFixed=as.logical(input$varFixed)))
-             shiny::req(dataOrg()[["BVdata"]],!is.null(input$zeroOptSelect),!is.null(input$varFixed))
-             BVdata <- dataOrg()[["BVdata"]]
-             ### Important change:  If variance is constant, do not need to remove/delete <=0
-             ### So when constant is chosen, "Ignore" will mean just keep the value, 
-             ### or you could still change it with "Replace", in which case
-             ### the user will still have to choose something.
-             #if(!is.null(input$zeroOptSelect)){
-                     if(input$zeroOptSelect == "Drop"){
-                             BVdata <- BVdata %>% filter(y > 0)
-                     }
-                     if(input$zeroOptSelect == "Replace"){
-                             BVdata$y <- ifelse(BVdata$y <= 0, as.numeric(input$zeroSub), BVdata$y)
-                     }
-             #}
-             return(BVdata)
-     })
      
      ### When there is not a column named "y", select one as the responses
      output$ycolUI <- renderUI({
@@ -244,11 +250,12 @@ shinyServer(function(input, output, session, clientData) {
              # This is not foolproof.  The run button will show if, for 
              # example, the replacment is itself <= 0, or a non-numeric string.
              #print(c(zeroOptSelect=input$zeroOptSelect,zeroSub=input$zeroSub))
-             if(is.null(input$zeroOptSelect)){
+             if(!values$zeros){
                      return(actionButton("updateRes","Calculate the Results"))
              }
-             if(!is.null(input$zeroOptSelect)){
+             if(values$zeros){
                      #only get in here if a <=0 value is detected in the data
+                     shiny::req(is.element("zeroOptSelect",names(input)))
                      if(input$zeroOptSelect!="Replace")return(actionButton("updateRes","Calculate the Results"))
                      #zeroSub will be in the input list once a value is begun by the user
                      #this is facilitated now by making the default value "" instead of NULL
@@ -264,11 +271,15 @@ shinyServer(function(input, output, session, clientData) {
              }
              })
      
-     ### In the data tab, show the data!
+     ### In the data tab, show the data whenever it is updated (I think)
+     ### not 100% sure how this works, required to changes to dataOrgZeroFixed()
+     ### where it also passes back the data if no zeros are found.
      output$DataTab <- renderTable({
+          # only render when there's something to...render...
+          shiny::req(dataOrg()$BVdata)
           dataOrgZeroFixed()
      })
-     
+
      ### show the plot for output
      output$plot <- renderPlot({
           values$cleanplot
@@ -451,8 +462,12 @@ shinyServer(function(input, output, session, clientData) {
      })
      
      ### (I think) whenever the data change, update the data tab
-     observeEvent(dataOrgZeroFixed(), {
+     observeEvent(dataOrg(), {
+             #observeEvent(dataOrgZeroFixed(), {
           updateTabsetPanel(session,"tabs", "Data For Analysis")
+     })
+     observeEvent(dataOrgZeroFixed(), {
+             updateTabsetPanel(session,"tabs", "Data For Analysis")
      })
      
      ### create the download link for the plots in pdf
