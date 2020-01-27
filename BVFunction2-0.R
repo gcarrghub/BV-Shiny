@@ -576,19 +576,22 @@ fitBV.PLL <- function(
     if(!varFixed){
       print("wRSS plot")
       wRSS4plot <- subset(bestGuesses,is.finite(wRSS) & is.finite(LL))
-      with(wRSS4plot,plot(x=wRSS,y=LL,log='x',ylim=range(LL)+c(-1,0)*diff(range(LL)),xlim=range(wRSS)*c(.1,1),main="LL vs wRSS among top start grid guesses"))
+      with(wRSS4plot,plot(x=wRSS,y=LL,log='x',ylim=range(LL)+c(-1,0)*diff(range(LL)),xlim=range(wRSS)*c(.1,1),
+                          main="LL vs wRSS among top start grid guesses"))
       with(wRSS4plot,{
         minI <- which.min(bestGuesses[,"wRSS"]);points(wRSS[minI],LL[minI],col="red",pch=16);
         minI <- which.min(bestGuesses[,"LL"]);points(wRSS[minI],LL[minI],col="red",pch=16);
       })
     }
     if(varFixed){
-      with(bestGuesses,plot(x=RSS,y=LL,log='x',ylim=range(LL)+c(-1,0)*diff(range(LL)),xlim=range(RSS)*c(.1,1),main="LL vs RSS among top start grid guesses"))
+      with(bestGuesses,plot(x=RSS,y=LL,log='x',ylim=range(LL)+c(-1,0)*diff(range(LL)),xlim=range(RSS)*c(.1,1),
+                            main="LL vs RSS among top start grid guesses"))
       with(bestGuesses,{
         minI <- which.min(bestGuesses[,"RSS"]);points(RSS[minI],LL[minI],col="red",pch=16);
         minI <- which.min(bestGuesses[,"LL"]); points(RSS[minI],LL[minI],col="red",pch=16);
       })
     }
+    title(sub = "Plot is for evaluating effectiveness of starting value guesses on two optimization criteria")
   }
   
   
