@@ -147,11 +147,12 @@ shinyServer(function(input, output, session, clientData) {
              #print(c(varFixed=as.logical(input$varFixed)))
              shiny::req(dataOrg()[["BVdata"]])
              BVdata <- dataOrg()[["BVdata"]]
+             ### values$zeros is set in dataOrg(), so it has to be ready here
              if(!values$zeros) return(BVdata)
              if(values$zeros){
                      shiny::req(is.element("zeroOptSelect",names(input)),is.element("varFixed",names(input)))
                      shiny::req(!is.null(input$zeroOptSelect),!is.null(input$varFixed))
-                     BVdata <- dataOrg()[["BVdata"]]
+                     #BVdata <- dataOrg()[["BVdata"]]
                      ### Important change:  If variance is constant, do not need to remove/delete <=0
                      ### So when constant is chosen, "Ignore" will mean just keep the value, 
                      ### or you could still change it with "Replace", in which case
