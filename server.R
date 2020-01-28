@@ -167,7 +167,8 @@ shinyServer(function(input, output, session, clientData) {
                      #}
              }
              output$baseplot <- renderPlot({
-                     isolate({
+                     #isolate
+                     ({
                              plotBV.LOG(dataOrgZeroFixed(),
                                         bestPars = NULL,
                                         ECxTarget=input$ECXvalue,
