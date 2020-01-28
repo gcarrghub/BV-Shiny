@@ -27,7 +27,7 @@ shinyUI(fluidPage(
       uiOutput("doseColUI"),
       #hr(),
       sliderInput("ECXvalue", "ECx Value", 0.05, .95, .5, step =
-                    0.025),
+                    0.05),
       #hr(),
       #checkboxInput("varFixed","Assume response variance is constant"),
       radioButtons(
@@ -212,7 +212,7 @@ shinyUI(fluidPage(
             tags$ul(
               tags$li(
                 "Choose the file containing data for analysis, from a single experiment, 
-              (see Data Format and Acceptable File Formats below) using the 'Choose File' 
+              (see Data Format and Acceptable File Formats) using the 'Choose File' 
               button in the grey panel at left. Verify data in this window."
               ),
               tags$li(
