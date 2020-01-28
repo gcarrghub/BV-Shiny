@@ -219,6 +219,7 @@ to3 <- function(x,nDigits=3){
 plotBV.LOG <- function(
   inputData,
   bestPars,
+  basePlot = FALSE,
   debugTF = FALSE,
   goodFit = TRUE,
   ylimInput = NULL,
@@ -288,6 +289,7 @@ plotBV.LOG <- function(
   #print(log.xVals)
   #print(ECxTarget)
   #print(optFUN.BV.LOG(bestPars,y=inputData$y,logdoses=log.xVals,ECx.target=ECxTarget,predictionsOnly=TRUE))
+  if(basePlot)return()
   if(debugTF)print(c(ECxTarget=ECxTarget))
   lines(x=10^log.xVals,y=optFUN.BV.LOG(bestPars,y=inputData$y,logdoses=log.xVals,ECx.target=ECxTarget,predictionsOnly=TRUE),col="blue",lwd=2)
   lines(x=10^log.xValsC,y=optFUN.BV.LOG(bestPars,y=inputData$y,logdoses=rep(log(0),2),ECx.target=ECxTarget,predictionsOnly=TRUE),col="blue",lwd=2)
