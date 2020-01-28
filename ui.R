@@ -208,8 +208,43 @@ shinyUI(fluidPage(
             tableOutput("DataTab")),
           column(
             width=9,
-            plotOutput("baseplot")
-          )
+            plotOutput("baseplot"),          strong("Directions:"),
+            tags$ul(
+              tags$li(
+                "Choose the file containing data for analysis, from a single experiment, 
+              (see Data Format and Acceptable File Formats below) using the 'Choose File' 
+              button in the grey panel at left. Verify data in this window."
+              ),
+              tags$li(
+                "Select the desired Effect Level using the slider (effect is %DECREASE 
+              from control level) eg, 0.20 is for the concentration resulting in at 
+              20% decrease in the response level.  This program attempts to limit this 
+              selection to levels plausible for the range of responses observed."
+              ),
+              tags$li(
+                "In many cases it makes sense to assume the measured response variability 
+              increases with the average level ('Proportionate'). If it is reasonable to 
+              assume the variance of the response is constant across doses, select 'Constant'."
+              ),
+              tags$li(
+                "The 'Calculate the Results' button in the lefthand panel will be available 
+              after data are selected as long as some basic criteria are satisfied.  
+              Both PDF and Excel versions of output can be downloaded at the bottom of results.  
+              If data were provided in Excel, the entire Excel workbook is returned, plus two sheets with results."
+              ),
+              tags$li(
+                strong("Compute time: "),"Results may take a minute or more, depending on the hardware being used."
+              ),
+              tags$li(
+                strong("Results: "),"The user is fully responsible for addressing validity of results.  
+              In particular, pay close attention to any cases where the ECx or confidence limits take values 
+              beyond the range of concentrations tested."
+              ),
+              tags$li(
+                strong("Exiting: "),"Closing the browser window(s) does not stop the R process.  If launched inside Rstudio, 
+              click the red 'stop sign' button, in the basic R gui press 'Esc'.  Quitting R/Rstudio has the same effect."
+              )
+            ))
       )),
       tabPanel(
         "Results",
