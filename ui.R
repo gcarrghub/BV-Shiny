@@ -6,7 +6,8 @@ library(shiny)
 shinyUI(fluidPage(
   titlePanel(
     HTML(
-      "<h1><strong>Bruce-Versteeg Model in Environmental Safety</strong></h1><h4>Version 2.0</h4><h4>Running from github repository https://github.com/gcarrghub/BV-Shiny</h4>"
+      "<h1><strong>Bruce-Versteeg Model in Environmental Safety</strong></h1><h4>Version 2.0</h4><h4>
+      Running from github repository https://github.com/gcarrghub/BV-Shiny</h4>"
     ),
     windowTitle = "Environmental Safety Bruce-Versteeg Tool"
   ),
@@ -61,27 +62,39 @@ shinyUI(fluidPage(
         tags$ul(
           tags$li("Others may work (e.g., Safari and Brave on Mac) but NOT MS IE in Windows."),
           tags$li(
-          "Usually the tool will open in your default browser.  If you are not certain of your browser's compatibility, 
-          simply copy-paste the full link/address into the address bar of an open Chrome or Firefox window.  
-          Your R session provides the same address in a message that should look like 'Listening on http://127.0.0.1:XXXX'."
+          "Usually the tool will open in your default browser.  
+          If you are not certain of your browser's compatibility, 
+          simply copy-paste the full link/address into the address 
+          bar of an open Chrome or Firefox window.  
+          Your R session provides the same address in a message 
+          that should look like 'Listening on http://127.0.0.1:XXXX'."
         ),
         tags$li(
-          "It's even OK to have multiple sessions open that point to the same address ;-)"
+          "It's even OK to have multiple sessions open that point 
+          to the same address.  For example, in one window
+          you could have the instructions displayed, and in the 
+          other select data and options.  Or side-by-side
+          analyses of different experiments."
         )),
         br(),
         strong("Purpose of the Tool:  "),
-        "Estimate the concentration that results in a given effect level, as a percentage of the average response of untreated controls, by methods described in
-                                              Bruce and Versteeg, ETC 1992.  This analysis is appropriate for experiments in which a continuous response is measured on each individual or
-                                              experimental unit, such as a body weight, or possibly for groups of individuals, such as counts of algae in a vessel.  The response level must decline as
-                                              toxicity (the exposure level) increases.",
+        "Estimate the concentration that results in a given effect level, 
+        as a percentage of the average response of untreated controls, 
+        by methods described in Bruce and Versteeg, ETC 1992.  This analysis 
+        is appropriate for experiments in which a continuous response is 
+        measured on each individual or experimental unit, such as a body weight, 
+        or possibly for groups of individuals, such as counts of algae in a vessel.  
+        The response level must decline as toxicity (the exposure level) increases.",
         tags$ul(
           tags$li(
             strong(
-              "This tool is developed for continuous positive value responses such as body weights (NOT counts such as from mortality endpoints)."
+              "This tool is developed for continuous positive value responses 
+              such as body weights (NOT counts such as from mortality endpoints)."
             )
           ),
           tags$li(
-            "Proper usage is the sole responsibility of the user.  No warranty is made or implied, but we appreciate constructive feedback."
+            "Proper usage is the sole responsibility of the user.  
+            No warranty is made or implied, but we appreciate constructive feedback."
           )
         ),
         br(),
@@ -90,21 +103,26 @@ shinyUI(fluidPage(
           strong("Directions:"),
           tags$ul(
             tags$li(
-              "Choose the file containing data for analysis, from a single experiment, (see Data Format and Acceptable File Formats below) using the
-                                                 'Choose File' button in the grey panel at left. Verify data in the 'Data For Analysis' tab."
+              "Choose the file containing data for analysis, from a single experiment, 
+              (see Data Format and Acceptable File Formats below) using the 'Choose File' 
+              button in the grey panel at left. Verify data in the 'Data For Analysis' tab."
             ),
             tags$li(
-              "Select the desired Effect Level using the slider (effect is %DECREASE from control level) eg, 0.20 is for the concentration resulting in at 20% decrease in the response level.
-                                                      This program attempts to limit this selection to levels plausible for the range of responses observed."
+              "Select the desired Effect Level using the slider (effect is %DECREASE 
+              from control level) eg, 0.20 is for the concentration resulting in at 
+              20% decrease in the response level.  This program attempts to limit this 
+              selection to levels plausible for the range of responses observed."
             ),
             tags$li(
-              "In many cases it makes sense to assume the measured response variability increases with the average level ('Proportionate').
-              If it is reasonable to assume the variance of the response is constant across doses, select 'Constant'."
+              "In many cases it makes sense to assume the measured response variability 
+              increases with the average level ('Proportionate'). If it is reasonable to 
+              assume the variance of the response is constant across doses, select 'Constant'."
             ),
             tags$li(
-              "The 'Calculate the Results' button in the lefthand panel will be available after data are selected as long as some basic 
-              criteria are satisfied.  Both PDF and Excel versions of output can be downloaded at the bottom of results.  If data were provided in Excel, the entire
-                                              Excel workbook is returned, plus two sheets with results."
+              "The 'Calculate the Results' button in the lefthand panel will be available 
+              after data are selected as long as some basic criteria are satisfied.  
+              Both PDF and Excel versions of output can be downloaded at the bottom of results.  
+              If data were provided in Excel, the entire Excel workbook is returned, plus two sheets with results."
             ),
             tags$li(
               strong("Compute time: "),"Results may take a minute or more, depending on the hardware being used."
@@ -124,10 +142,13 @@ shinyUI(fluidPage(
           tags$ul(
             tags$li(
               strong("Layout: "),
-              "!!!-IMPORTANT-!!! Data must be arranged in a clean, column-wise rectangular layout with the column labels in the first row, 
-              and no extra space/columns on the left margin, no extra columns between data columns, etc.  It should look like the example here.
-              No annotation of data values should be used (eg, asterisks); everything should be purely numeric except for the column labels.  
-              Even formatting of values can be problematic, so as a general rule-of-thumb keep the data file minimal, and clean."
+              "!!!-IMPORTANT-!!! Data must be arranged in a clean, column-wise rectangular 
+              layout with the column labels in the first row, and no extra space/columns 
+              on the left margin, no extra columns between data columns, etc.  It should 
+              look like the example here.  No annotation of data values should be used 
+              (eg, asterisks); everything should be purely numeric except for the column labels.  
+              Even formatting of values can be problematic, so as a general rule-of-thumb keep 
+              the data file minimal, and clean."
             ),
             tags$li(
               strong("Variables: "),
@@ -139,12 +160,12 @@ shinyUI(fluidPage(
             tags$li(
               strong("Zero or negative response values: "),
               "When the model incorporates variance proportionality,
-                                                negative and zero data values can cause errors (note also that the model predicts only
-                                                strictly positive response levels).  As such, when the default proportionality
-                                                model is fit, the user will be prompted for a single substitution value for all negative
-                                                or zero values.  While this 'on the fly' option is made available for convenience,
-                                                it will always be better to make such changes in such a way that
-                                                it is documented and the corrected values are in the submitted data."
+              negative and zero data values can cause errors (note also that the model predicts only
+              strictly positive response levels).  As such, when the default proportionality
+              model is fit, the user will be prompted for a single substitution value for all negative
+              or zero values.  While this 'on the fly' option is made available for convenience,
+              it will always be better to make such changes in such a way that
+              it is documented and the corrected values are in the submitted data."
             ),
             tags$li(
               strong("MSExcel (both .xls & .xlsx extensions):"), "Data for each experiment to be analyzed should be in
@@ -154,10 +175,12 @@ shinyUI(fluidPage(
               one in each worksheet."
 ),
             tags$li(
-              strong("Comma separated Values (.csv): "),"Follow same principles.  In this plain text file format, values in a row are separated by commas."
+              strong("Comma separated Values (.csv): "),"Follow same principles.  
+              In this plain text file format, values in a row are separated by commas."
             ),
             tags$li(
-              strong("Text (.txt): "),"Follow same principles.  In this plain text file format, values in a row are separated by tabs."
+              strong("Text (.txt): "),"Follow same principles.  
+              In this plain text file format, values in a row are separated by tabs."
             )
           ),
           br(),
@@ -179,8 +202,15 @@ shinyUI(fluidPage(
         "Data For Analysis",
         p("Data read in for Analysis"),
         div(textOutput("badData"), style = "color:red"),
-        tableOutput("DataTab")
-      ),
+        fluidRow(
+          column(
+            width = 3,
+            tableOutput("DataTab")),
+          column(
+            width=9,
+            plotOutput("baseplot")
+          )
+      )),
       tabPanel(
         "Results",
         uiOutput("messages"),

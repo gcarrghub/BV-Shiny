@@ -145,10 +145,10 @@ shinyServer(function(input, output, session, clientData) {
      dataOrgZeroFixed <- reactive({
              #BVdata has to be present in output from dataOrg to continue
              #print(c(varFixed=as.logical(input$varFixed)))
+             source("BVFunction2-0.R", local = TRUE)
              shiny::req(dataOrg()[["BVdata"]])
              BVdata <- dataOrg()[["BVdata"]]
              ### values$zeros is set in dataOrg(), so it has to be ready here
-             if(!values$zeros) return(BVdata)
              if(values$zeros){
                      shiny::req(is.element("zeroOptSelect",names(input)),is.element("varFixed",names(input)))
                      shiny::req(!is.null(input$zeroOptSelect),!is.null(input$varFixed))
@@ -165,8 +165,22 @@ shinyServer(function(input, output, session, clientData) {
                              BVdata$y <- ifelse(BVdata$y <= 0, as.numeric(input$zeroSub), BVdata$y)
                      }
                      #}
-                     return(BVdata)
              }
+             output$baseplot <- renderPlot({
+                     isolate({
+                             plotBV.LOG(dataOrgZeroFixed(),
+                                        bestPars = NULL,
+                                        ECxTarget=input$ECXvalue,
+                                        goodFit = FALSE,
+                                        basePlot = TRUE,
+                                        ylimInput=c(0,max(na.omit(dataOrgZeroFixed()$y))),
+                                        xlim=10^range(c(floor(log10(min(dataOrgZeroFixed()$dose[dataOrgZeroFixed()$dose>0])))-1,ceiling(log10(max(dataOrgZeroFixed()$dose))))),
+                                        clean=TRUE,littleLogs=FALSE,xlabel = input$xlab, ylabel = input$ylab)
+                             title(main="Input data scatter plot")
+                     })
+                     
+             })
+             return(BVdata)
      })
      
      ### When zeros are present, modify the lefthand data section to open
