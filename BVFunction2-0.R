@@ -289,7 +289,19 @@ plotBV.LOG <- function(
   #print(log.xVals)
   #print(ECxTarget)
   #print(optFUN.BV.LOG(bestPars,y=inputData$y,logdoses=log.xVals,ECx.target=ECxTarget,predictionsOnly=TRUE))
-  if(basePlot)return()
+  if(basePlot){
+    aggData <- aggregate(y~dose,data=inputData,FUN = median,na.rm=TRUE)
+    aggData$dose[aggData$dose==0] <- 10^(ceiling(par("usr")[1]))
+    abline(h=              aggData$y[aggData$dose==min(aggData$dose)],lty=3,col="magenta",lwd=2)
+    abline(h=(1-ECxTarget)*aggData$y[aggData$dose==min(aggData$dose)],lty=2,col="magenta",lwd=2)
+    mtext(side=4,at=              aggData$y[aggData$dose==min(aggData$dose)] + 0.02*diff(par("usr")[3:4]),
+          text = "Approx Bkgd/Control \nResponse Level",las=1,adj=1,cex=1.5,col="blue")
+    mtext(side=4,at=(1-ECxTarget)*aggData$y[aggData$dose==min(aggData$dose)] + 0.02*diff(par("usr")[3:4]),
+          text = paste("Approx EC",format(round(100*ECxTarget,1))," Level",sep=""),las=1,adj=1,cex=1.5,col="blue")
+    with(aggData,lines(x=dose,y=y,type="b",pch=0))
+    axis.break(axis=1,breakpos=10^(ceiling(par("usr")[1])+.8),bgcol="white",breakcol="black",style="zigzag",brw=0.02)
+    return()
+  }
   if(debugTF)print(c(ECxTarget=ECxTarget))
   lines(x=10^log.xVals,y=optFUN.BV.LOG(bestPars,y=inputData$y,logdoses=log.xVals,ECx.target=ECxTarget,predictionsOnly=TRUE),col="blue",lwd=2)
   lines(x=10^log.xValsC,y=optFUN.BV.LOG(bestPars,y=inputData$y,logdoses=rep(log(0),2),ECx.target=ECxTarget,predictionsOnly=TRUE),col="blue",lwd=2)
