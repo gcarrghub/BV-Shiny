@@ -132,8 +132,9 @@ shinyUI(fluidPage(
               beyond the range of concentrations tested."
             ),
             tags$li(
-              strong("Exiting: "),"Closing the browser window(s) does not stop the R process.  If launched inside Rstudio, 
-              click the red 'stop sign' button, in the basic R gui press 'Esc'.  Quitting R/Rstudio has the same effect."
+              strong("Exiting: "),"Closing the browser window(s) does not stop the R process.  
+              If launched inside Rstudio, click the red 'stop sign' button, in the basic R 
+              gui press 'Esc'.  Quitting/killing/exiting from R/Rstudio has the same effect."
             )
           ),
           br(),
@@ -242,8 +243,9 @@ shinyUI(fluidPage(
               beyond the range of concentrations tested."
               ),
               tags$li(
-                strong("Exiting: "),"Closing the browser window(s) does not stop the R process.  If launched inside Rstudio, 
-              click the red 'stop sign' button, in the basic R gui press 'Esc'.  Quitting R/Rstudio has the same effect."
+                strong("Exiting: "),"Closing the browser window(s) does not stop the R process.  
+              If launched inside Rstudio, click the red 'stop sign' button, in the basic R 
+              gui press 'Esc'.  Quitting/killing/exiting from R/Rstudio has the same effect."
               )
             ))
       )),
