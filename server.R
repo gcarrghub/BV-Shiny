@@ -76,6 +76,11 @@ shinyServer(function(input, output, session, clientData) {
                   wb <- loadWorkbook(file = inFile$datapath)
                   #print(str(wb))
                   shNames <- wb$sheet_names
+                  shNames <- shNames[sapply(shNames,FUN=function(SN){
+                          testSheet <- readWorkbook(wb, sheet=SN, colNames=TRUE)
+                          numericCols <- sum(unlist(lapply(testSheet,is.numeric)))
+                          (numericCols>1)
+                  })]
                   #print(shNames)
                selectInput('shName', 'Select Sheet Containing Data', shNames)
           } else NULL
