@@ -5,6 +5,9 @@ library(gridExtra)
 #library(XLConnect)
 library(openxlsx)
 
+#use a reactive value that can be used to control what is shown in tabs
+#for example, to clear when new data are selected
+
 if(dir.exists("www")){
         #delete leftover files if they are present from previous runs
         #this only matters when the repository is set up in rstudio
@@ -25,6 +28,20 @@ shinyServer(function(input, output, session, clientData) {
      values$cleanplot <- NULL
      values$stamp <- ""
 
+     source("BVFunction2-0.R", local = TRUE)
+     
+     rv <- reactiveValues()
+     rv$amsg <- ""
+     
+     displayResults <- reactive({ return(rv$amsg!="" & regexpr("failed", rv$amsg) < 1) })
+     clearResults <- reactive({ return(!(rv$amsg!="" & regexpr("failed", rv$amsg) < 1)) })
+     #reactive(displayResults(),{if(!displayResults()){
+     #        output$plot <- NULL
+     #        output$resultsTable <- NULL
+     #        output$messages <- NULL
+     #        output$downloadPlot <- NULL
+     #        output$downloadResults <- NULL
+     #}})
      #session$onFlush(function(){
      #   write(strftime(Sys.time(),"%Y  %m/%d %H:%M:%S" ), file="counter/counter.txt", append = T, sep="\n")
      # }
@@ -145,7 +162,7 @@ shinyServer(function(input, output, session, clientData) {
      dataOrgZeroFixed <- reactive({
              #BVdata has to be present in output from dataOrg to continue
              #print(c(varFixed=as.logical(input$varFixed)))
-             source("BVFunction2-0.R", local = TRUE)
+             #source("BVFunction2-0.R", local = TRUE)
              shiny::req(dataOrg()[["BVdata"]])
              BVdata <- dataOrg()[["BVdata"]]
              ### values$zeros is set in dataOrg(), so it has to be ready here
@@ -321,7 +338,7 @@ shinyServer(function(input, output, session, clientData) {
           paste0("www/", getShortFileName(), ".xlsx")
      })
 
-     ### the analysis process.
+     ### THE MAIN ANALYSIS CONTROL
      observeEvent(input$updateRes, {
           updateTabsetPanel(session, "tabs", "Results")
           values$stamp <- format(Sys.time(), "%Y%m%d%H%M%S")
@@ -329,7 +346,7 @@ shinyServer(function(input, output, session, clientData) {
           withProgress({
                setProgress(message = "Please Wait")
                varFixed <- as.logical(input$varFixed)
-               source("BVFunction2-0.R", local = TRUE)
+               #source("BVFunction2-0.R", local = TRUE)
                if(input$debugPrint)print(paste("Working directory:",getwd()))
                setProgress(detail = "Running analysis and creating pdf")
                pdffilename <- getPDFfilename()
@@ -480,35 +497,45 @@ shinyServer(function(input, output, session, clientData) {
                
                saveWorkbook(wb = wb,file = xlsxfilename,overwrite = TRUE)
                ### saveWorkbook(wb, xlsxfilename)### XLCONNECT here
-
+               rv$amsg <- "The analysis is complete.  Click the button below to download the results:"
+               
           })
      })
      
+     #observeEvent(dataOrg(), {
+     #        #observeEvent(dataOrgZeroFixed(), {
+     #     updateTabsetPanel(session,"tabs", "Data For Analysis")
+     #})
+     
      ### (I think) whenever the data change, update the data tab
-     observeEvent(dataOrg(), {
-             #observeEvent(dataOrgZeroFixed(), {
-          updateTabsetPanel(session,"tabs", "Data For Analysis")
-     })
-     observeEvent(dataOrgZeroFixed(), {
+     inputChanges <- reactive({list(dataOrgZeroFixed(),dataOrg(),input$ECXvalue,input$varFixed)})
+     observeEvent(inputChanges(), {
+             print(input)
+             print(input$updateRes)
+             rv$amsg <- ""
+             output$plot <- NULL
+             output$resultsTable <- NULL
+             output$messages <- renderUI({
+                     p("Do not download files here unless data table/plot are displayed.
+                       Otherwise these files may be for a previously run analysis.")})
+             
              updateTabsetPanel(session,"tabs", "Data For Analysis")
      })
-     
-     ### create the download link for the plots in pdf
      output$downloadPlot <- downloadHandler( 
-          filename=paste0(getShortFileName(), ".pdf"),
-          content=function(file){
-               file.copy(getPDFfilename(), file)
-          }   
+             filename=paste0(getShortFileName(), ".pdf"),
+             content=function(file){
+                     file.copy(getPDFfilename(), file)
+             }   
      )
      ### create the download link for the excel file
      output$downloadResults <- downloadHandler( 
-          filename=paste0(getShortFileName(), ".xlsx"),
-          content=function(file){
-               file.copy(getExcelfilename(), file)
-          }   
+             filename=paste0(getShortFileName(), ".xlsx"),
+             content=function(file){
+                     file.copy(getExcelfilename(), file)
+             }   
      )
-     
-     ### the example data that are displayed with instructions for the tool
+
+        ### the example data that are displayed with instructions for the tool
      output$sampleData <- renderTable({ 
           data.frame(y=c(120.9,118,134,121.2,118.6,120.4,82.6,62.8,
                          81.6,49.3,41.6,41.3,12.7,14.7,14.7,4.93,4,4.4),
