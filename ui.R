@@ -121,8 +121,7 @@ shinyUI(fluidPage(
             tags$li(
               "The 'Calculate the Results' button in the lefthand panel will be available 
               after data are selected as long as some basic criteria are satisfied.  
-              Both PDF and Excel versions of output can be downloaded at the bottom of results.  
-              If data were provided in Excel, the entire Excel workbook is returned, plus two sheets with results."
+              Both PDF and Excel versions of output can be downloaded at the bottom of results."
             ),
             tags$li(
               strong("Compute time: "),"Results may take a minute or more, depending on the hardware being used."
@@ -168,11 +167,15 @@ shinyUI(fluidPage(
               it is documented and the corrected values are in the submitted data."
             ),
             tags$li(
-              strong("MSExcel (both .xls & .xlsx extensions):"), "Data for each experiment to be analyzed should be in
-              separate worksheets and follow 'Layout' principles above.  Start the data in row 1 column A. 
-              When it contains multiple worksheets, the user will be prompted to select one that should contain valid data.   
-              The github repository contains an XLSX workbook within which several valid example datasets are provided, 
-              one in each worksheet."
+              strong("MSExcel (both .xls & .xlsx extensions):"), "Data for each experiment to be analyzed 
+              should be in separate worksheets and follow 'Layout' principles above.  Start the data in 
+              row 1 column A. When it contains multiple worksheets, the user will be prompted to select 
+              one that should contain valid data.  The github repository contains an XLSX workbook within 
+              which several valid example datasets are provided, one in each worksheet.  By offering this 
+              xlsx capability we also need to prevent errors by filtering out sheets that do not look
+              like data.  If the desired worksheet is not in the list, then we were unable to detect at 
+              least two columns of numbers that could be used in this type of model so it was removed; 
+              check the data versus our guidance above."
 ),
             tags$li(
               strong("Comma separated Values (.csv): "),"Follow same principles.  
@@ -229,8 +232,7 @@ shinyUI(fluidPage(
               tags$li(
                 "The 'Calculate the Results' button in the lefthand panel will be available 
               after data are selected as long as some basic criteria are satisfied.  
-              Both PDF and Excel versions of output can be downloaded at the bottom of results.  
-              If data were provided in Excel, the entire Excel workbook is returned, plus two sheets with results."
+              Both PDF and Excel versions of output can be downloaded at the bottom of results."
               ),
               tags$li(
                 strong("Compute time: "),"Results may take a minute or more, depending on the hardware being used."
