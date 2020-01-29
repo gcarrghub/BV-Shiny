@@ -55,7 +55,7 @@ shinyUI(fluidPage(
   column(
     width = 9,
     tabsetPanel(
-      id = "tabs",
+      id = "tabs",#type="pills",
       tabPanel(
         "Help/Documentation",
         h3("Firefox or Chrome browsers suggested."),

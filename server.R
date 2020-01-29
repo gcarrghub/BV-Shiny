@@ -166,6 +166,7 @@ shinyServer(function(input, output, session, clientData) {
                      }
                      #}
              }
+             #showTab(inputId = "tabs",target = "Data For Analysis")
              output$baseplot <- renderPlot({
                      #isolate
                      ({
