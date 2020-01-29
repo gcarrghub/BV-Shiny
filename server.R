@@ -521,7 +521,7 @@ shinyServer(function(input, output, session, clientData) {
              updateTabsetPanel(session,"tabs", "Data For Analysis")
      })
      observeEvent({rv$amsg},{
-             print(c(rv.amsg=rv$amsg))
+             #print(c(rv.amsg=rv$amsg))
              if(rv$amsg==""){
                      output$downloadPlot <- downloadHandler(
                              filename=paste0(getShortFileName(), ".pdf"),
