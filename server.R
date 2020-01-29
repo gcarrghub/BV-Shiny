@@ -404,32 +404,32 @@ shinyServer(function(input, output, session, clientData) {
                })
                
                output$messages <- renderUI({
-                       shiny::req(values$zeros)
-                    if(values$zeros){
-                            if(input$zeroOptSelect == "Drop"){
-                                    negmessage <- "Some values <= 0 have been dropped from the analysis."
-                            }
-                            if(input$zeroOptSelect == "Keep"){
-                                    negmessage <- "Some values <= 0 are included in the analysis."
-                                 }
-                            if(input$zeroOptSelect == "Replace"){
-                                        negmessage <- paste0("All values <= 0 have been replaced with ", input$zeroSub, ".")
-                         }
-                    } else {
-                         negmessage <- "There are no response values <= 0 in the analyzed dataset."
-                    }
-                    if(is.na(as.numeric(resultsTable$LCL.95))){
-                         lclmessage <- "The lower confidence limit could not be calculated."
-                    } else {
-                         lclmessage <- "The lower confidence limit calculation was successful."
-                    }
-                    if(is.na(as.numeric(resultsTable$UCL.95))){
-                         uclmessage <- "The upper confidence limit could not be calculated."
-                    } else {
-                         uclmessage <- "The upper confidence limit calculation was successful."
-                    }
-                    return(p(negmessage, br(), lclmessage, br(), uclmessage))
-                    
+                       shiny::req(values$zeros,input$zeroOptSelect)
+                       if(values$zeros){
+                               if(input$zeroOptSelect == "Drop"){
+                                       negmessage <- "Some values <= 0 have been dropped from the analysis."
+                               }
+                               if(input$zeroOptSelect == "Keep"){
+                                       negmessage <- "Some values <= 0 are included in the analysis."
+                               }
+                               if(input$zeroOptSelect == "Replace"){
+                                       negmessage <- paste0("All values <= 0 have been replaced with ", input$zeroSub, ".")
+                               }
+                       } else {
+                               negmessage <- "There are no response values <= 0 in the analyzed dataset."
+                       }
+                       if(is.na(as.numeric(resultsTable$LCL.95))){
+                               lclmessage <- "The lower confidence limit could not be calculated."
+                       } else {
+                               lclmessage <- "The lower confidence limit calculation was successful."
+                       }
+                       if(is.na(as.numeric(resultsTable$UCL.95))){
+                               uclmessage <- "The upper confidence limit could not be calculated."
+                       } else {
+                               uclmessage <- "The upper confidence limit calculation was successful."
+                       }
+                       return(p(negmessage, br(), lclmessage, br(), uclmessage))
+                       
                })
                
                setProgress(detail = "Creating Excel")
