@@ -154,17 +154,16 @@ shinyUI(fluidPage(
               "The input data MUST contain at least two columns, one for the measured response (by default, 'y') 
               and one for the concentration tested ('dose').  If the data does not contain these column labels 
               (the order does not matter), then the user should select the appropriate columns using the drop-down 
-              menus after uploading the file (choices will be taken from the input file)."
+              selections that will appear after selecting the file/sheet (choices will be those found in the first 
+              line of the input file)."
             ),
             tags$li(
-              strong("Zero or negative response values: "),
-              "When the model incorporates variance proportionality,
+              strong("Zero or negative response values: "),"When the model incorporates variance proportionality,
               negative and zero data values can cause errors (note also that the model predicts only
               strictly positive response levels).  As such, when the default proportionality
               model is fit, the user will be prompted for a single substitution value for all negative
               or zero values.  While this 'on the fly' option is made available for convenience,
-              it will always be better to make such changes in such a way that
-              it is documented and the corrected values are in the submitted data."
+              it is best to avoid undocumented data edits."
             ),
             tags$li(
               strong("MSExcel (both .xls & .xlsx extensions):"), "Data for each experiment to be analyzed 
