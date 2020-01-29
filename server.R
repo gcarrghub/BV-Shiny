@@ -5,8 +5,6 @@ library(gridExtra)
 #library(XLConnect)
 library(openxlsx)
 
-#use a reactive value that can be used to control what is shown in tabs
-#for example, to clear when new data are selected
 
 if(dir.exists("www")){
         #delete leftover files if they are present from previous runs
@@ -30,8 +28,10 @@ shinyServer(function(input, output, session, clientData) {
 
      source("BVFunction2-0.R", local = TRUE)
      
+     #use a reactive value that can be used to control what is shown in tabs
+     #for example, to clear when new data are selected
      rv <- reactiveValues()
-     rv$amsg <- ""
+     rv$amsg <- "" #amsg = "a message"
      
      displayResults <- reactive({ return(rv$amsg!="" & regexpr("failed", rv$amsg) < 1) })
      clearResults <- reactive({ return(!(rv$amsg!="" & regexpr("failed", rv$amsg) < 1)) })
@@ -508,7 +508,7 @@ shinyServer(function(input, output, session, clientData) {
      #     updateTabsetPanel(session,"tabs", "Data For Analysis")
      #})
      
-     ### (I think) whenever the data change, update the data tab
+     ### (I think) whenever the data change, update the data tab and clear out results tab
      inputChanges <- reactive({list(dataOrgZeroFixed(),dataOrg(),input$ECXvalue,input$varFixed)})
      observeEvent(inputChanges(), {
              #print(rv$amsg)
@@ -520,6 +520,10 @@ shinyServer(function(input, output, session, clientData) {
                        Otherwise these files may be for a previously run analysis.")})
              updateTabsetPanel(session,"tabs", "Data For Analysis")
      })
+     #based on rv$amsg, only download a file when an analysis has been completed,
+     #and no changes to data or analysis params have been selected.  So the one
+     #watchout is that if you are doing multiple runs, you need to download the
+     #output before doing anything else.
      observeEvent({rv$amsg},{
              #print(c(rv.amsg=rv$amsg))
              if(rv$amsg==""){
