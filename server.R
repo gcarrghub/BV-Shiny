@@ -498,7 +498,7 @@ shinyServer(function(input, output, session, clientData) {
                
                saveWorkbook(wb = wb,file = xlsxfilename,overwrite = TRUE)
                ### saveWorkbook(wb, xlsxfilename)### XLCONNECT here
-               rv$amsg <- "The analysis is complete.  Click the button below to download the results:"
+               rv$amsg <- "complete"
                
           })
      })
@@ -511,28 +511,57 @@ shinyServer(function(input, output, session, clientData) {
      ### (I think) whenever the data change, update the data tab
      inputChanges <- reactive({list(dataOrgZeroFixed(),dataOrg(),input$ECXvalue,input$varFixed)})
      observeEvent(inputChanges(), {
+             print(rv$amsg)
              rv$amsg <- ""
              output$plot <- NULL
              output$resultsTable <- NULL
              output$messages <- renderUI({
                      p("Do not download files here unless data table/plot are displayed.
                        Otherwise these files may be for a previously run analysis.")})
-             
              updateTabsetPanel(session,"tabs", "Data For Analysis")
      })
-     output$downloadPlot <- downloadHandler( 
-             filename=paste0(getShortFileName(), ".pdf"),
-             content=function(file){
-                     file.copy(getPDFfilename(), file)
-             }   
-     )
-     ### create the download link for the excel file
-     output$downloadResults <- downloadHandler( 
-             filename=paste0(getShortFileName(), ".xlsx"),
-             content=function(file){
-                     file.copy(getExcelfilename(), file)
-             }   
-     )
+     observeEvent({rv$amsg},{
+             print(c(rv.amsg=rv$amsg))
+             if(rv$amsg==""){
+                     output$downloadPlot <- downloadHandler(
+                             filename=paste0(getShortFileName(), ".pdf"),
+                             content=function(file){} 
+                     )
+                     output$downloadResults <- downloadHandler( 
+                             filename=paste0(getShortFileName(), ".xlsx"),
+                             content=function(file){}
+                     )
+             }
+             if(rv$amsg=="complete"){
+                     output$downloadPlot <- downloadHandler(
+                             filename=paste0(getShortFileName(), ".pdf"),
+                             content=function(file){
+                                     file.copy(getPDFfilename(), file)
+                             }   
+                     )
+                     output$downloadResults <- downloadHandler( 
+                             filename=paste0(getShortFileName(), ".xlsx"),
+                             content=function(file){
+                                     file.copy(getExcelfilename(), file)
+                             }   
+                     )
+             }
+             })
+     if(FALSE){
+             output$downloadPlot <- downloadHandler(
+                     filename=paste0(getShortFileName(), ".pdf"),
+                     content=function(file){
+                             file.copy(getPDFfilename(), file)
+                     }   
+             )
+             ### create the download link for the excel file
+             output$downloadResults <- downloadHandler( 
+                     filename=paste0(getShortFileName(), ".xlsx"),
+                     content=function(file){
+                             file.copy(getExcelfilename(), file)
+                     }   
+             )
+     }
 
         ### the example data that are displayed with instructions for the tool
      output$sampleData <- renderTable({ 
