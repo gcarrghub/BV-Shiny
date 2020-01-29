@@ -511,7 +511,7 @@ shinyServer(function(input, output, session, clientData) {
      ### (I think) whenever the data change, update the data tab
      inputChanges <- reactive({list(dataOrgZeroFixed(),dataOrg(),input$ECXvalue,input$varFixed)})
      observeEvent(inputChanges(), {
-             print(rv$amsg)
+             #print(rv$amsg)
              rv$amsg <- ""
              output$plot <- NULL
              output$resultsTable <- NULL
