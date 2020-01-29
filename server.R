@@ -404,6 +404,7 @@ shinyServer(function(input, output, session, clientData) {
                })
                
                output$messages <- renderUI({
+                       shiny::req(values$zeros)
                     if(values$zeros){
                             if(input$zeroOptSelect == "Drop"){
                                     negmessage <- "Some values <= 0 have been dropped from the analysis."
