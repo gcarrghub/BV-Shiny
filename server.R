@@ -4,6 +4,7 @@ library(grid)
 library(gridExtra)
 #library(XLConnect)
 library(openxlsx)
+library(plotrix)
 
 
 if(dir.exists("www")){
