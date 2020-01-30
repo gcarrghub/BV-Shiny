@@ -120,7 +120,7 @@ shinyUI(fluidPage(
               assume the variance of the response is constant across doses, select 'Constant'."
             ),
             tags$li(
-              "The 'Calculate the Results' button in the lefthand panel will be available 
+              "The 'Calculate Results' button in the lefthand panel will be available 
               after data are selected as long as some basic criteria are satisfied.  
               Both PDF and Excel versions of output can be downloaded at the bottom of results."
             ),
@@ -232,7 +232,7 @@ shinyUI(fluidPage(
               assume the variance of the response is constant across doses, select 'Constant'."
               ),
               tags$li(
-                "The 'Calculate the Results' button in the lefthand panel will be available 
+                "The 'Calculate Results' button in the lefthand panel will be available 
               after data are selected as long as some basic criteria are satisfied.  
               Both PDF and Excel versions of output can be downloaded at the bottom of results."
               ),

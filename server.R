@@ -296,12 +296,12 @@ shinyServer(function(input, output, session, clientData) {
              # example, the replacment is itself <= 0, or a non-numeric string.
              #print(c(zeroOptSelect=input$zeroOptSelect,zeroSub=input$zeroSub))
              if(!values$zeros){
-                     return(actionButton("updateRes","Calculate the Results"))
+                     return(actionButton("updateRes","Calculate Results"))
              }
              if(values$zeros){
                      #only get in here if a <=0 value is detected in the data
                      shiny::req(is.element("zeroOptSelect",names(input)))
-                     if(input$zeroOptSelect!="Replace")return(actionButton("updateRes","Calculate the Results"))
+                     if(input$zeroOptSelect!="Replace")return(actionButton("updateRes","Calculate Results"))
                      #zeroSub will be in the input list once a value is begun by the user
                      #this is facilitated now by making the default value "" instead of NULL
                      if(input$zeroOptSelect=="Replace" & is.element("zeroSub",names(input))){
@@ -311,7 +311,7 @@ shinyServer(function(input, output, session, clientData) {
                              is.a.number <- is.finite(as.numeric(input$zeroSub))
                              if(is.a.number){if(as.numeric(input$zeroSub)>0)ready2go <- TRUE}
                              if(!ready2go)return(p("Please enter a positive value to replace observations <=0.", style="color:red"))
-                             if( ready2go)return(actionButton("updateRes","Calculate the Results"))
+                             if( ready2go)return(actionButton("updateRes","Calculate Results"))
                      }
              }
              })
