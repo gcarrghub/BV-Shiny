@@ -110,8 +110,9 @@ shinyUI(fluidPage(
             tags$li(
               "Select the desired Effect Level using the slider (effect is %DECREASE 
               from control level) eg, 0.20 is for the concentration resulting in at 
-              20% decrease in the response level.  This program attempts to limit this 
-              selection to levels plausible for the range of responses observed."
+              20% decrease in the response level.  In cases where the response level
+              does not approach zero at high concentrations, the estimated effect 
+              level concentration can be beyond the range of those tested."
             ),
             tags$li(
               "In many cases it makes sense to assume the measured response variability 
@@ -221,8 +222,9 @@ shinyUI(fluidPage(
               tags$li(
                 "Select the desired Effect Level using the slider (effect is %DECREASE 
               from control level) eg, 0.20 is for the concentration resulting in at 
-              20% decrease in the response level.  This program attempts to limit this 
-              selection to levels plausible for the range of responses observed."
+              20% decrease in the response level.  In cases where the response level
+              does not approach zero at high concentrations, the estimated effect 
+              level concentration can be beyond the range of those tested."
               ),
               tags$li(
                 "In many cases it makes sense to assume the measured response variability 
