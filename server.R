@@ -12,7 +12,7 @@ cleanUp <- function(){
                         "lowerCI","optimxMethods","packages","packageTests","upperCI","varFixed","verbose")
         invisible(sapply(globalVars,FUN = function(objname)if(exists(objname,envir = .GlobalEnv))rm(list=objname,envir = .GlobalEnv)))
 }
-
+cleanUp()
 if(dir.exists("www")){
         #delete leftover files if they are present from previous runs
         #this only matters when the repository is set up in rstudio
@@ -561,8 +561,6 @@ shinyServer(function(input, output, session, clientData) {
                                      file.copy(getExcelfilename(), file)
                              }   
                      )
-                     #cleanup
-                     cleanUp()
              }
              })
      if(FALSE){
