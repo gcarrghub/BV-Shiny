@@ -2,6 +2,14 @@
 #### https://github.com/gcarrghub/BV-Shiny  # 
 ####                                        # 
 
+#these are objects that get written to the global environment
+cleanUp <- function(){
+  globalVars <- c("bestParsEC50","bestParsECx","bestParsLL","BVdata","fBasedCritVal","goodFlag",
+                  "lowerCI","optimxMethods","packages","packageTests","upperCI","varFixed","verbose")
+  invisible(sapply(globalVars,FUN = function(objname)if(exists(objname,envir = .GlobalEnv))rm(list=objname,envir = .GlobalEnv)))
+}
+cleanUp()
+
 ####
 #### In all cases, should be able to just do the following (as in, the equivalent to sourcing the file)
 #### Details given in if(FALSE){} blocks are details details
