@@ -6,6 +6,12 @@ library(gridExtra)
 library(openxlsx)
 library(plotrix)
 
+#these are objects that get written to the global environment
+cleanUp <- function(){
+        globalVars <- c("bestParsEC50","bestParsECx","bestParsLL","BVdata","fBasedCritVal","goodFlag",
+                        "lowerCI","optimxMethods","packages","packageTests","upperCI","varFixed","verbose")
+        invisible(sapply(globalVars,FUN = function(objname)if(exists(objname,envir = .GlobalEnv))rm(list=objname,envir = .GlobalEnv)))
+}
 
 if(dir.exists("www")){
         #delete leftover files if they are present from previous runs
@@ -555,6 +561,8 @@ shinyServer(function(input, output, session, clientData) {
                                      file.copy(getExcelfilename(), file)
                              }   
                      )
+                     #cleanup
+                     cleanUp()
              }
              })
      if(FALSE){
