@@ -3,12 +3,15 @@
 ####                                        # 
 
 #these are objects that get written to the global environment
+print("Check 0")
 cleanUp <- function(){
   globalVars <- c("bestParsEC50","bestParsECx","bestParsLL","BVdata","fBasedCritVal","goodFlag",
                   "lowerCI","optimxMethods","packages","packageTests","upperCI","varFixed","verbose")
   invisible(sapply(globalVars,FUN = function(objname)if(exists(objname,envir = .GlobalEnv))rm(list=objname,envir = .GlobalEnv)))
 }
+print("Check 1")
 cleanUp()
+print("Check 2")
 
 ####
 #### In all cases, should be able to just do the following (as in, the equivalent to sourcing the file)
