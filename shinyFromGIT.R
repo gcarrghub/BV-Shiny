@@ -15,7 +15,7 @@ cleanUp()
 #### Details given in if(FALSE){} blocks are details details
 #### Before running the tool need to check for required packages and install if necessary
 #### Typically should only need to do this once per installation of R
-packages = c("shiny", "dplyr", "gridExtra", "openxlsx", "optimx", "plotrix","devtools")
+packages = c("devtools","shiny", "dplyr", "gridExtra", "openxlsx", "optimx", "plotrix")
 packageTests <- sapply(packages,FUN = require,character.only=TRUE)
 if(all(packageTests)){
   cat("\n",paste(rep("#",100),collapse = ""),
@@ -28,7 +28,7 @@ if(sum(!packageTests)>0){
       "\n   ",paste(names(packageTests[!packageTests]),collapse = " "),
       "\n  Requires internet access and sufficient rights to install R packages on your system.",
       "\n",paste(rep("#",100),collapse = ""),"\n")
-  install.packages(packages[!packageTests], repos = "https://cran.rstudio.com/", dependencies=TRUE)
+  install.packages(packages[!packageTests], repos = "https://cran.rstudio.com/", dependencies=TRUE,type="binary")
   ### In one case, needed to add this to a users install.packages call:  INSTALL_opts = c('--no-lock')
   # recheck for packages
   packageTests <- sapply(packages,FUN = require,character.only=TRUE)
