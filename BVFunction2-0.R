@@ -610,7 +610,7 @@ fitBV.PLL <- function(
   
   
   
-  if(do3Dstart & require(rgl)){
+  if(do3Dstart & FALSE){
     assign(".gridResults",SSvals,pos=1)
     open3d()
     ranges <- apply(testGrid,2,range)
@@ -741,7 +741,7 @@ fitBV.PLL <- function(
                 trustLower=0,trustUpper=0,ECx.outside=as.numeric((10^bestParsECx["xmid"])>max(nzDoses))))
     
   }
-  if(do3Dstart & require(rgl)){
+  if(do3Dstart & FALSE){
     #spheres3d(bestPars,col="blue",radius=.1)
   }
   if(verbose){
