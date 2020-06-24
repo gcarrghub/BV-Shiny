@@ -464,7 +464,7 @@ shinyServer(function(input, output, session, clientData) {
                #####createSheet(wb, plotSheetName)### XLCONNECT here
                addWorksheet(wb = wb,sheetName = plotSheetName,zoom = 200)
                cleanPlotFilename <- paste0("www/cleanResPlot", values$stamp, ".png")
-               png(cleanPlotFilename,height=6,width=8,units = "in",res = 200,type = "cairo")
+               png(cleanPlotFilename,height=6,width=8,units = "in",res = 200)#,type = "cairo")
                par(mai=c(1,1,0.1,0.1))
                plotBV.LOG(inputData = dataOrgZeroFixed(),
                           bestPars = bestParsECx,
@@ -480,7 +480,7 @@ shinyServer(function(input, output, session, clientData) {
                            height = 6,width = 8)
                
                dirtyPlotFilename <- paste0("www/dirtyResPlot", values$stamp, ".png")
-               png(dirtyPlotFilename,height=6,width=8,units = "in",res = 200,type = "cairo")
+               png(dirtyPlotFilename,height=6,width=8,units = "in",res = 200)#,type = "cairo")
                par(mai=c(1,1,1,0.1))
                plotBV.LOG(inputData = dataOrgZeroFixed(),
                           bestPars = bestParsECx,
